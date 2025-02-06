@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="cream">#F6F5E4</color>
+    <color name="terracotta">#E2725B</color>
+    <color name="olive_green">#6B8E23</color>
+    <color name="dark_brown">#654321</color>
+    <color name="light_gray">#F5F5F5</color>
+    <color name="light_brown">#E9D7C5</color>
+
+</resources>

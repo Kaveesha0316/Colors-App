@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Colors</string>
+    <string name="welcome_t1">WELCOME TO COLORS</string>
+    <string name="welcome_t2">A Marketplace Where Every Product Tells a Unique Story!</string>
+    <string name="welcome_t3">Sign Up</string>
+    <string name="welcome_t4">Sign In</string>
+    <string name="welcome_t5">Get Start With</string>
+    <string name="welcome_t6">or</string>
+    <string name="signIn_t1">Don\'t have an account?</string>
+    <string name="signUp_t1">You already have an account?</string>
+    <string name="home_t1">Discover Colors</string>
+    <string name="home_t2">Search product...</string>
+    <string name="home_t3">Category</string>
+    <string name="home_t4">Top Sale </string>
+    <string name="cart_t1">My Cart</string>
+    <string name="cart_t2">Subtotal</string>
+    <string name="cart_t3">Shipping</string>
+    <string name="cart_t4">TOTAL</string>
+    <string name="cart_t5">Checkout</string>
+    <string name="title_activity_home">Home</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_home">Home</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_orders">Orders</string>
+    <string name="title_my_products">My products</string>
+
+
+
+</resources>
