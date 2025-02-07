@@ -11,7 +11,8 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato_regular"
         android:text="@string/cart_t1"
         android:textColor="@color/dark_brown"
         android:textSize="24sp"
@@ -21,8 +22,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="28dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="264dp"
+
+
+        android:src="@drawable/bell"
+        app:layout_constraintBottom_toBottomOf="@+id/textView11"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintTop_toTopOf="@+id/textView11"
+        app:layout_constraintVertical_bias="0.0" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView2"
+        android:id="@+id/cartrecyclerView"
         android:layout_width="375dp"
         android:layout_height="454dp"
         android:layout_marginTop="20dp"
@@ -38,7 +52,7 @@
         android:background="@drawable/carousel_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+        app:layout_constraintTop_toBottomOf="@+id/cartrecyclerView" />
 
     <TextView
         android:id="@+id/textView18"
@@ -50,7 +64,7 @@
         android:textColor="@color/dark_brown"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+        app:layout_constraintTop_toBottomOf="@+id/cartrecyclerView" />
 
     <TextView
         android:id="@+id/textView19"

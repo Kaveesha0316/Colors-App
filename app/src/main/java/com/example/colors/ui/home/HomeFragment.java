@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aemerse.slider.ImageCarousel;
@@ -25,7 +24,7 @@ import com.example.colors.databinding.FragmentHomeBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.product;
+import model.Product;
 
 public class HomeFragment extends Fragment {
 
@@ -40,12 +39,12 @@ public class HomeFragment extends Fragment {
         setupImageCarousel();
         setCategoryItem();
 
-        ArrayList<product> productList =   new ArrayList<>();
-        productList.add(new product("U001","shan","250"));
-        productList.add(new product("U002","kamal","250"));
-        productList.add(new product("U003","nimal","542"));
-        productList.add(new product("U004","sumal","250"));
-        productList.add(new product("U005","namal","140"));
+        ArrayList<Product> productList =   new ArrayList<>();
+        productList.add(new Product("U001","shan","250"));
+        productList.add(new Product("U002","kamal","250"));
+        productList.add(new Product("U003","nimal","542"));
+        productList.add(new Product("U004","sumal","250"));
+        productList.add(new Product("U005","namal","140"));
 
         RecyclerView recyclerView = view.findViewById(R.id.productrecyclerView);
 
@@ -130,8 +129,8 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
         }
     }
 
-    public  ArrayList<product> productArrayList;
-    public ProductAdapter(ArrayList<product> productArrayList) {
+    public  ArrayList<Product> productArrayList;
+    public ProductAdapter(ArrayList<Product> productArrayList) {
         this.productArrayList = productArrayList;
 
     }
