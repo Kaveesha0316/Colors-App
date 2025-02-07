@@ -19,7 +19,10 @@
     <string name="cart_t5">Checkout</string>
     <string name="order_t1">My Order</string>
     <string name="order_t2">Qty:</string>
-    <string name="order_t3">Perched date:</string>
+    <string name="order_t3">Related Products</string>
+    <string name="adsearch_t1">Find Your Product</string>
+    <string name="adsearch_t2">Min:</string>
+    <string name="adsearch_t3">Max:</string>
     <string name="title_activity_home">Home</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -39,7 +42,6 @@
     <string name="title_cart">Cart</string>
     <string name="title_orders">Orders</string>
     <string name="title_my_products">My products</string>
-
 
 
 </resources>

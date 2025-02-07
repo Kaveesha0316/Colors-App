@@ -1,10 +1,13 @@
 package com.example.colors.ui.home;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,13 +15,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aemerse.slider.ImageCarousel;
 import com.aemerse.slider.model.CarouselItem;
+import com.example.colors.AdvanceSearchActivity;
 import com.example.colors.R;
+import com.example.colors.SingleProductActivity;
 import com.example.colors.databinding.FragmentHomeBinding;
 
 import java.util.ArrayList;
@@ -30,6 +36,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,7 +47,7 @@ public class HomeFragment extends Fragment {
         setCategoryItem();
 
         ArrayList<Product> productList =   new ArrayList<>();
-        productList.add(new Product("U001","shan","250"));
+        productList.add(new Product("U001","Product Title","Rs.2500.00"));
         productList.add(new Product("U002","kamal","250"));
         productList.add(new Product("U003","nimal","542"));
         productList.add(new Product("U004","sumal","250"));
@@ -53,10 +60,19 @@ public class HomeFragment extends Fragment {
 //        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
 
-        ProductAdapter productAdapter = new ProductAdapter(productList);
+        ProductAdapter productAdapter = new ProductAdapter(getContext(),productList);
         recyclerView.setAdapter(productAdapter);
 
 //        recyclerView.setAdapter(new ProductAdapter(productList)); // Set your adapter
+
+        ImageButton imageButton = view.findViewById(R.id.advancesearchimageButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AdvanceSearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         return view;
@@ -120,17 +136,21 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
         public TextView textView1;
         public TextView textView2;
         public Button Button1;
+        public CardView cardView;
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             textView1 = itemView.findViewById(R.id.productTitle);
             textView2 = itemView.findViewById(R.id.productPrice);
 //            imageView = itemView.findViewById(R.id.productImage);
             Button1 = itemView.findViewById(R.id.addToCartButton);
+            cardView = itemView.findViewById(R.id.product_card_view);
         }
     }
 
     public  ArrayList<Product> productArrayList;
-    public ProductAdapter(ArrayList<Product> productArrayList) {
+    private Context context;
+    public ProductAdapter(Context context, ArrayList<Product> productArrayList) {
+        this.context = context;
         this.productArrayList = productArrayList;
 
     }
@@ -149,14 +169,20 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
 
+        Product product = productArrayList.get(position);
+
         holder.textView1.setText(productArrayList.get(position).getName());
         holder.textView2.setText(productArrayList.get(position).getPrice());
 //        holder.imageView.setText(productArrayList.get(position).getId());
 
-        holder.Button1.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(),"mobile",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, SingleProductActivity.class);
+                intent.putExtra("productId", product.getId());
+                intent.putExtra("productName", product.getName());
+                intent.putExtra("productPrice", product.getPrice());
+                context.startActivity(intent);
             }
         });
     }

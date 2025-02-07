@@ -49,7 +49,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/textInputEditText"
+        android:id="@+id/advanceSearchtextInputEditText"
         android:layout_width="327dp"
         android:layout_height="39dp"
         android:layout_marginStart="8dp"
@@ -68,17 +68,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/advancesearchimageButton"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/advance_search"
         android:src="@drawable/slider2"
-        app:layout_constraintBottom_toBottomOf="@+id/textInputEditText"
+        app:layout_constraintBottom_toBottomOf="@+id/advanceSearchtextInputEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/textInputEditText"
-        app:layout_constraintTop_toTopOf="@+id/textInputEditText"
+        app:layout_constraintStart_toEndOf="@+id/advanceSearchtextInputEditText"
+        app:layout_constraintTop_toTopOf="@+id/advanceSearchtextInputEditText"
         app:layout_constraintVertical_bias="0.0"
         app:tint="@color/cream" />
 
@@ -91,7 +91,7 @@
         android:background="@drawable/carousel_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputEditText" />
+        app:layout_constraintTop_toBottomOf="@id/advanceSearchtextInputEditText" />
 
     <TextView
         android:id="@+id/textView13"
@@ -109,7 +109,7 @@
         app:layout_constraintTop_toBottomOf="@+id/carousel" />
 
     <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
+        android:id="@+id/advanceSeachhorizontalScrollView"
         android:layout_width="379dp"
         android:layout_height="93dp"
         android:layout_marginTop="8dp"
@@ -138,7 +138,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+        app:layout_constraintTop_toBottomOf="@+id/advanceSeachhorizontalScrollView" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/productrecyclerView"

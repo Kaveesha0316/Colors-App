@@ -8,4 +8,8 @@
         <item name="android:textSize">25sp</item>
         <item name="fontFamily">@font/lato_regular</item>
     </style>
+    <style name="CustomRatingBar" parent="Widget.AppCompat.RatingBar.Small">
+        <item name="colorControlNormal">@color/gray</item> <!-- Unfilled star color -->
+        <item name="colorControlActivated">@color/gold</item> <!-- Filled star color -->
+    </style>
 </resources>
