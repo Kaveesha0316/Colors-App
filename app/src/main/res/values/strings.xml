@@ -23,6 +23,19 @@
     <string name="adsearch_t1">Find Your Product</string>
     <string name="adsearch_t2">Min:</string>
     <string name="adsearch_t3">Max:</string>
+    <string name="myproduct_t1">My Products</string>
+    <string name="myproduct_t2">Orders</string>
+    <string name="myproduct_t3">Products</string>
+    <string name="myproduct_t4">Profit by category</string>
+    <string name="myproduct_t5">Products</string>
+    <string name="myproduct_t6">Total Profit</string>
+    <string name="myproduct_t7">Total selling product qty:</string>
+    <string name="myproduct_t8">Most selling product: </string>
+    <string name="myproduct_t9">Available qty: </string>
+    <string name="myproduct_t10">Selling qty;</string>
+    <string name="myproduct_t11">Profit: </string>
+    <string name="myproduct_t12">Update</string>
+    <string name="myproduct_t13">Status</string>
     <string name="title_activity_home">Home</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -40,7 +53,7 @@
     <string name="title_home">Home</string>
     <string name="title_profile">Profile</string>
     <string name="title_cart">Cart</string>
-    <string name="title_orders">Orders</string>
+    <string name="title_orders">My orders</string>
     <string name="title_my_products">My products</string>
 
 

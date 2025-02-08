@@ -22,7 +22,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -194,11 +193,11 @@ class  SaerchProductAdapter extends RecyclerView.Adapter<SaerchProductAdapter.Sa
         public CardView cardView;
         public SaerchProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView1 = itemView.findViewById(R.id.productTitle);
-            textView2 = itemView.findViewById(R.id.productPrice);
+            textView1 = itemView.findViewById(R.id.myproductTitle);
+            textView2 = itemView.findViewById(R.id.myproductpft);
 //            imageView = itemView.findViewById(R.id.productImage);
-            Button1 = itemView.findViewById(R.id.addToCartButton);
-            cardView = itemView.findViewById(R.id.product_card_view);
+            Button1 = itemView.findViewById(R.id.UpdateButton);
+            cardView = itemView.findViewById(R.id.Myproduct_card_view);
         }
     }
 

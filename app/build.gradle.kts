@@ -51,5 +51,6 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     implementation ("com.google.android.material:material:1.12.0")
     implementation ("com.github.akshaaatt:Sliding-Carousel:1.0.4")
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 }

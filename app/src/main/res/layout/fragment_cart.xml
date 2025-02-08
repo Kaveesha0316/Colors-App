@@ -40,6 +40,7 @@
         android:layout_width="375dp"
         android:layout_height="454dp"
         android:layout_marginTop="20dp"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -49,7 +50,7 @@
         android:layout_width="379dp"
         android:layout_height="199dp"
         android:layout_marginTop="12dp"
-        android:background="@drawable/carousel_border"
+        android:background="@drawable/edittext_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cartrecyclerView" />

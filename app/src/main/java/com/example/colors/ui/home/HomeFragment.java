@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -139,11 +138,11 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
         public CardView cardView;
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView1 = itemView.findViewById(R.id.productTitle);
-            textView2 = itemView.findViewById(R.id.productPrice);
+            textView1 = itemView.findViewById(R.id.myproductTitle);
+            textView2 = itemView.findViewById(R.id.myproductpft);
 //            imageView = itemView.findViewById(R.id.productImage);
-            Button1 = itemView.findViewById(R.id.addToCartButton);
-            cardView = itemView.findViewById(R.id.product_card_view);
+            Button1 = itemView.findViewById(R.id.UpdateButton);
+            cardView = itemView.findViewById(R.id.Myproduct_card_view);
         }
     }
 

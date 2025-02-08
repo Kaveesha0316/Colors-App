@@ -188,10 +188,10 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productRating" />
+        app:layout_constraintTop_toBottomOf="@+id/myproductRating" />
 
     <RatingBar
-        android:id="@+id/productRating"
+        android:id="@+id/myproductRating"
         style="@style/CustomRatingBar"
         android:layout_width="74dp"
         android:layout_height="21dp"
@@ -245,9 +245,9 @@
         android:fontFamily="@font/lato_regular"
         android:text="In Stock"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/productRating"
+        app:layout_constraintBottom_toBottomOf="@+id/myproductRating"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/productRating"
+        app:layout_constraintTop_toTopOf="@+id/myproductRating"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView

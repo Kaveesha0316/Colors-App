@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cream"
+    tools:context=".myProductActivity">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/advanceSearchtextInputEditText2"
+        android:layout_width="327dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/search_bar"
+        android:drawableStart="@drawable/search2"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/lato_regular"
+        android:hint="@string/home_t2"
+        android:paddingLeft="10dp"
+        android:textColor="@color/dark_brown"
+        android:textColorHint="@color/dark_brown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView31" />
+
+    <TextView
+        android:id="@+id/textView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato_regular"
+        android:text="@string/myproduct_t1"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="28dp"
+        android:layout_height="35dp"
+
+
+        android:layout_marginStart="236dp"
+        android:src="@drawable/bell"
+        app:layout_constraintBottom_toBottomOf="@+id/textView31"
+        app:layout_constraintStart_toEndOf="@+id/textView31"
+        app:layout_constraintTop_toTopOf="@+id/textView31"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="12dp"
+        android:background="@drawable/edittext_background"
+        app:layout_constraintBottom_toBottomOf="@+id/advanceSearchtextInputEditText2"
+        app:layout_constraintStart_toEndOf="@+id/advanceSearchtextInputEditText2"
+        app:layout_constraintTop_toTopOf="@+id/advanceSearchtextInputEditText2"
+        app:srcCompat="@drawable/plus" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myproductRecycleView"
+        android:layout_width="387dp"
+        android:layout_height="658dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/advanceSearchtextInputEditText2" />
+</androidx.constraintlayout.widget.ConstraintLayout>
