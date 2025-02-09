@@ -36,6 +36,24 @@
     <string name="myproduct_t11">Profit: </string>
     <string name="myproduct_t12">Update</string>
     <string name="myproduct_t13">Status</string>
+    <string name="addproduct_t1">Add your product</string>
+    <string name="addproduct_t2">Add quality three images here</string>
+    <string name="addproduct_t3">Product name</string>
+    <string name="addproduct_t4">Product price</string>
+    <string name="addproduct_t5">Product Qty</string>
+    <string name="addproduct_t6">Product category</string>
+    <string name="addproduct_t7">Add product</string>
+    <string name="addproduct_t8">We charge a small 10% fee to keep the app running smoothly and guarantee a safe delivery for your product!</string>
+    <string name="cusomerOrder_t">Customer Orders</string>
+    <string name="cusomerOrder_t2">Customer Details</string>
+    <string name="cusomerOrder_t3">Customer Orders</string>
+    <string name="cusomerOrder_t4">Customer Orders</string>
+    <string name="profile_t1">Contact Profile</string>
+    <string name="profile_t2">Contact Information</string>
+    <string name="profile_t3">Website: </string>
+    <string name="profile_t4">Email: </string>
+    <string name="profile_t5">Phone: </string>
+    <string name="profile_t6">Contact Information </string>
     <string name="title_activity_home">Home</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

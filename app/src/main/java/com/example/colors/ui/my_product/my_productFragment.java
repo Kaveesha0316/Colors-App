@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.colors.CustomerOrderrActivity;
 import com.example.colors.R;
 import com.example.colors.databinding.FragmentCartBinding;
 import com.example.colors.myProductActivity;
@@ -58,6 +59,14 @@ public class my_productFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getContext(), myProductActivity.class));
+            }
+        });
+
+        Button button2 =  view.findViewById(R.id.button5);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), CustomerOrderrActivity.class));
             }
         });
 

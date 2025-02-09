@@ -1,11 +1,13 @@
 package com.example.colors;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -48,6 +50,16 @@ public class myProductActivity extends AppCompatActivity {
 
         MyProductAdapter productAdapter = new MyProductAdapter(myProductActivity.this,productList);
         recyclerView.setAdapter(productAdapter);
+
+        ImageView imageView = findViewById(R.id.addproductimageView);
+
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(myProductActivity.this, AddProductActivity.class));
+            }
+        });
     }
 }
 
@@ -110,16 +122,18 @@ class  MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.MyProductV
         holder.textView5.setText(productArrayList.get(position).getProfit());
 //        holder.imageView.setText(productArrayList.get(position).getId());
 
-//        holder.cardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, SingleProductActivity.class);
-//                intent.putExtra("productId", product.getId());
-//                intent.putExtra("productName", product.getName());
-//                intent.putExtra("productPrice", product.getPrice());
-//                context.startActivity(intent);
-//            }
-//        });
+        holder.Button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, AddProductActivity.class);
+                intent.putExtra("productId", product.getId());
+                intent.putExtra("productName", product.getName());
+                intent.putExtra("productPrice", product.getPrice());
+                intent.putExtra("productQty", product.getAv_qty());
+                intent.putExtra("isUpdate", "true");
+                context.startActivity(intent);
+            }
+        });
     }
 
 

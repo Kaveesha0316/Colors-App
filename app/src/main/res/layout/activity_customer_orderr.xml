@@ -6,14 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cream"
-    tools:context=".myProductActivity">
+    tools:context=".CustomerOrderrActivity">
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/advanceSearchtextInputEditText2"
-        android:layout_width="327dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:id="@+id/advanceSearchtextInputEditText3"
+        android:layout_width="384dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/search_bar"
         android:drawableStart="@drawable/search2"
         android:drawablePadding="10dp"
@@ -22,52 +21,45 @@
         android:paddingLeft="10dp"
         android:textColor="@color/dark_brown"
         android:textColorHint="@color/dark_brown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView31" />
+        app:layout_constraintTop_toBottomOf="@+id/textView46" />
 
     <TextView
-        android:id="@+id/textView31"
+        android:id="@+id/textView46"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/lato_regular"
-        android:text="@string/myproduct_t1"
-        android:textSize="20sp"
+        android:text="@string/cusomerOrder_t"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageView5"
         android:layout_width="28dp"
         android:layout_height="35dp"
 
 
-        android:layout_marginStart="236dp"
+        android:layout_marginStart="168dp"
         android:src="@drawable/bell"
-        app:layout_constraintBottom_toBottomOf="@+id/textView31"
-        app:layout_constraintStart_toEndOf="@+id/textView31"
-        app:layout_constraintTop_toTopOf="@+id/textView31"
+        app:layout_constraintBottom_toBottomOf="@+id/textView46"
+        app:layout_constraintStart_toEndOf="@+id/textView46"
+        app:layout_constraintTop_toTopOf="@+id/textView46"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/addproductimageView"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="12dp"
-        android:background="@drawable/edittext_background"
-        android:backgroundTint="@color/cream"
-        app:layout_constraintBottom_toBottomOf="@+id/advanceSearchtextInputEditText2"
-        app:layout_constraintStart_toEndOf="@+id/advanceSearchtextInputEditText2"
-        app:layout_constraintTop_toTopOf="@+id/advanceSearchtextInputEditText2"
-        app:srcCompat="@drawable/more" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/myproductRecycleView"
-        android:layout_width="391dp"
-        android:layout_height="713dp"
-        android:layout_marginTop="20dp"
+        android:id="@+id/CusOrderRcycleView"
+        android:layout_width="394dp"
+        android:layout_height="691dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/advanceSearchtextInputEditText2" />
+        app:layout_constraintTop_toBottomOf="@+id/advanceSearchtextInputEditText3"
+        app:layout_constraintVertical_bias="0.163" />
 </androidx.constraintlayout.widget.ConstraintLayout>

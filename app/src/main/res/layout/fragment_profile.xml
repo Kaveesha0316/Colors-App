@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
+
         android:padding="16dp">
 
         <!-- Header with Background Gradient -->
@@ -21,6 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="363dp"
             android:layout_height="267dp"
+
             android:background="@drawable/profile_gradient_bg">
 
             <!-- Profile Picture -->
@@ -90,6 +92,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="320dp"
+                android:layout_marginTop="4dp"
+                android:padding="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/info" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Space
@@ -111,7 +124,7 @@
 
         <Space
             android:layout_width="361dp"
-            android:layout_height="24dp" />
+            android:layout_height="15dp" />
 
         <EditText
             android:id="@+id/edit_user_address"
@@ -126,7 +139,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="15dp" />
 
         <EditText
             android:id="@+id/edit_user_mobile"
@@ -143,7 +156,23 @@
         <!-- Save and Logout Buttons -->
         <Space
             android:layout_width="match_parent"
-            android:layout_height="24dp" />
+            android:layout_height="15dp" />
+
+        <EditText
+            android:id="@+id/edit_user_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/search_bar"
+            android:fontFamily="@font/lato_regular"
+            android:hint="City"
+            android:inputType="text"
+            android:padding="12dp"
+            android:textSize="20sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
 
         <Button
             android:id="@+id/btn_save"
