@@ -1,5 +1,6 @@
 package com.example.colors;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,9 +13,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ContactActivity extends AppCompatActivity {
 
@@ -36,12 +42,32 @@ public class ContactActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.mapcard,supportMapFragment);
         fragmentTransaction.commit();
 
+        LatLng latLng = new LatLng(6.918197514612613, 79.85572534333654);
+
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
                 Log.i("colors-log","get map ready");
+
+                googleMap.animateCamera(
+                        CameraUpdateFactory.newCameraPosition(
+                                new CameraPosition.Builder()
+                                        .target(latLng)
+                                        .zoom(18)
+                                        .build()
+                        )
+                );
+
+                googleMap.addMarker(
+                        new MarkerOptions()
+                                .position(latLng)
+                                .title("Colors (Pvt) Ltd \uD83D\uDE80")
+                                .icon(BitmapDescriptorFactory.fromResource((R.drawable.gps)))
+                );
             }
         });
+
+
 
     }
 }
