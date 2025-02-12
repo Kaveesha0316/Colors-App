@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "941819467144",
+    "project_id": "colors-ec208",
+    "storage_bucket": "colors-ec208.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941819467144:android:9c4010de33a4dc8c8ed63d",
+        "android_client_info": {
+          "package_name": "com.example.colors"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuwEbpg3YD0g2MqsPKmVl_F16-zV_ZQ-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

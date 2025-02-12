@@ -2,10 +2,15 @@ package com.example.colors.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,11 +30,25 @@ import com.example.colors.AdvanceSearchActivity;
 import com.example.colors.R;
 import com.example.colors.SingleProductActivity;
 import com.example.colors.databinding.FragmentHomeBinding;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import DTO.Product_DTO;
+import DTO.ResponseDTO;
+import DTO.ResponseListDTO;
+import DTO.User_DTO;
 import model.Product;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HomeFragment extends Fragment {
 
@@ -45,33 +64,180 @@ public class HomeFragment extends Fragment {
         setupImageCarousel();
         setCategoryItem();
 
-        ArrayList<Product> productList =   new ArrayList<>();
-        productList.add(new Product("U001","Product Title","Rs.2500.00"));
-        productList.add(new Product("U002","kamal","250"));
-        productList.add(new Product("U003","nimal","542"));
-        productList.add(new Product("U004","sumal","250"));
-        productList.add(new Product("U005","namal","140"));
-
-        RecyclerView recyclerView = view.findViewById(R.id.productrecyclerView);
-
-//        LinearLayoutManager linearLayoutManager =  new LinearLayoutManager(getContext());
-//        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
-
-        ProductAdapter productAdapter = new ProductAdapter(getContext(),productList);
-        recyclerView.setAdapter(productAdapter);
-
-//        recyclerView.setAdapter(new ProductAdapter(productList)); // Set your adapter
-
-        ImageButton imageButton = view.findViewById(R.id.advancesearchimageButton);
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        new Thread(new Runnable() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AdvanceSearchActivity.class);
-                startActivity(intent);
+            public void run() {
+                Gson gson = new Gson();
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+
+                // Build URL with query parameters dynamically
+                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.2:8080/colors/home/loadproduct")
+                        .newBuilder();
+                urlBuilder.addQueryParameter("searchText", "");
+
+               // Convert to URL string
+                String url = urlBuilder.build().toString();
+
+                // Create request
+                Request request = new Request.Builder()
+                        .url(url)
+                        .build();
+
+                try {
+
+                    Response response = okHttpClient.newCall(request).execute();
+                    String responsetext = response.body().string();
+
+                             Log.i("colors-log", responsetext);
+
+                    ResponseListDTO<Product_DTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<Product_DTO>>(){}.getType());
+
+                    if (responseDTO.isSuccess()) {
+
+                        List<Product_DTO> product_dtoList = responseDTO.getContent();
+
+
+
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ArrayList<Product> productList =   new ArrayList<>();
+
+                                            for (Product_DTO product:product_dtoList){
+                                                productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice())));
+
+                                            }
+
+
+                                            RecyclerView recyclerView = view.findViewById(R.id.productrecyclerView);
+
+
+                                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
+
+                                            ProductAdapter productAdapter = new ProductAdapter(getContext(),productList);
+                                            recyclerView.setAdapter(productAdapter);
+
+
+                                            ImageButton imageButton = view.findViewById(R.id.advancesearchimageButton);
+                                            imageButton.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    Intent intent = new Intent(getContext(), AdvanceSearchActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                        }
+                                    });
+                    } else {
+
+
+                    }
+
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+
+            }
+        }).start();
+
+        TextInputEditText searchEditText = view.findViewById(R.id.SearchtextInputEditText);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Gson gson = new Gson();
+
+                        OkHttpClient okHttpClient = new OkHttpClient();
+
+                        // Build URL with query parameters dynamically
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.2:8080/colors/home/loadproduct")
+                                .newBuilder();
+                        urlBuilder.addQueryParameter("searchText", searchEditText.getText().toString());
+
+                        // Convert to URL string
+                        String url = urlBuilder.build().toString();
+
+                        // Create request
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .build();
+
+                        try {
+
+                            Response response = okHttpClient.newCall(request).execute();
+                            String responsetext = response.body().string();
+
+                            Log.i("colors-log", responsetext);
+
+                            ResponseListDTO<Product_DTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<Product_DTO>>(){}.getType());
+
+                            if (responseDTO.isSuccess()) {
+
+                                List<Product_DTO> product_dtoList = responseDTO.getContent();
+
+
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ArrayList<Product> productList =   new ArrayList<>();
+
+                                        for (Product_DTO product:product_dtoList){
+                                            productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice())));
+
+                                        }
+
+
+                                        RecyclerView recyclerView = view.findViewById(R.id.productrecyclerView);
+
+
+                                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
+
+                                        ProductAdapter productAdapter = new ProductAdapter(getContext(),productList);
+                                        recyclerView.setAdapter(productAdapter);
+
+
+                                        ImageButton imageButton = view.findViewById(R.id.advancesearchimageButton);
+                                        imageButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                Intent intent = new Intent(getContext(), AdvanceSearchActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+
+
+                            }
+
+
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+
+                }).start();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
             }
         });
+
+
 
 
         return view;
@@ -192,6 +358,8 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
     public int getItemCount() {
         return  this.productArrayList.size();
     }
+
+
 }
 
 

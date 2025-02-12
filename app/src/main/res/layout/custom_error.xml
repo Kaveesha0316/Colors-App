@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center"
+    android:elevation="10dp">
+
+    <!-- Error Icon -->
+    <ImageView
+        android:id="@+id/error_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:contentDescription="Error Icon"
+        android:src="@drawable/mark" />
+
+    <!-- Error Message -->
+    <TextView
+        android:id="@+id/tvErrorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Something went wrong!"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingTop="10dp"/>
+
+    <!-- Dismiss Button -->
+    <Button
+        android:id="@+id/ErrorbtnDismiss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/terracotta"
+        android:layout_marginTop="15dp"/>
+
+</LinearLayout>

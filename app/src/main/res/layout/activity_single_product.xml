@@ -92,7 +92,7 @@
 
     <!-- Product Description -->
 
-    <!-- Add to Cart Button -->
+
 
     <TextView
         android:id="@+id/sinlge_product_description"

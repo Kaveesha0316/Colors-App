@@ -1,6 +1,8 @@
 package com.example.colors;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -27,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
+        String userJson = sharedPreferences.getString("userData",null);
+
+        if (userJson != null){
+            startActivity(new Intent(MainActivity.this,HomeActivity2.class));
+        }
 
         ImageView imageView = findViewById(R.id.imageView1);
         Button button1 = findViewById(R.id.button);
