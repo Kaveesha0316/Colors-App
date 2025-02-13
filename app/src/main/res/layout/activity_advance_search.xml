@@ -144,11 +144,11 @@
         android:id="@+id/spinner"
         android:layout_width="154dp"
         android:layout_height="31dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.945"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar2" />
+        app:layout_constraintTop_toBottomOf="@+id/button10" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/advancerecycleview"
@@ -159,5 +159,18 @@
         app:layout_constraintHorizontal_bias="0.564"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="355dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/olive_green"
+        android:fontFamily="@font/lato_regular"
+        android:text="Find product"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

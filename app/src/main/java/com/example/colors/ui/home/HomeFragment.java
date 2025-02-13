@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
                 OkHttpClient okHttpClient = new OkHttpClient();
 
                 // Build URL with query parameters dynamically
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.2:8080/colors/home/loadproduct")
+                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
                         .newBuilder();
                 urlBuilder.addQueryParameter("searchText", "");
 
@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment {
                         OkHttpClient okHttpClient = new OkHttpClient();
 
                         // Build URL with query parameters dynamically
-                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.2:8080/colors/home/loadproduct")
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
                                 .newBuilder();
                         urlBuilder.addQueryParameter("searchText", searchEditText.getText().toString());
 

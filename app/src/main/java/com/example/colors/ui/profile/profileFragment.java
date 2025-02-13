@@ -21,12 +21,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.colors.ContactActivity;
 import com.example.colors.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -48,8 +56,13 @@ import okhttp3.Response;
 
 public class profileFragment extends Fragment {
       User_DTO user;
+    private Uri UserImageUri;
 
-
+    EditText editText1;
+    EditText editText2;
+    EditText editText3;
+    EditText editText4;
+    EditText editText5;
 
       Context context;
 
@@ -63,11 +76,11 @@ public class profileFragment extends Fragment {
 
 //        loadProfileImage();
         TextView textView6 = view.findViewById(R.id.textView16);
-        EditText editText1 = view.findViewById(R.id.edit_user_name);
-        EditText editText2 = view.findViewById(R.id.edit_user_password);
-        EditText editText3 = view.findViewById(R.id.edit_user_mobile);
-        EditText editText4 = view.findViewById(R.id.edit_user_address);
-        EditText editText5 = view.findViewById(R.id.edit_user_city);
+         editText1 = view.findViewById(R.id.edit_user_name);
+         editText2 = view.findViewById(R.id.edit_user_password);
+         editText3 = view.findViewById(R.id.edit_user_mobile);
+         editText4 = view.findViewById(R.id.edit_user_address);
+         editText5 = view.findViewById(R.id.edit_user_city);
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
         String userjson = sharedPreferences.getString("userData",null);
@@ -76,6 +89,16 @@ public class profileFragment extends Fragment {
             Gson gson = new Gson();
 
             user = gson.fromJson(userjson, User_DTO.class);
+
+            ImageView imageView = view.findViewById(R.id.profile_picture);
+            String imageUrl = user.getImage_path();
+
+
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.art) // Optional: Placeholder image
+                    .error(R.drawable.placeholder) // Optional: Error image
+                    .into(imageView);
 
             textView6.setText(user.getEmail());
             editText1.setText(user.getName());
@@ -95,6 +118,40 @@ public class profileFragment extends Fragment {
             }
         });
 
+        /////////profile image/////////
+
+        ImageView UserProfilImageView = view.findViewById(R.id.profile_picture);
+
+        ActivityResultLauncher<String> nicFrontImagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                uri -> {
+                    if (uri != null) {
+                        UserProfilImageView.setImageURI(uri);
+                        UserImageUri = uri;
+                    }
+                }
+        );
+
+        UserProfilImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                nicFrontImagePickerLauncher.launch("image/*");
+            }
+        });
+
+        Button logout = view.findViewById(R.id.btn_logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadImageToFirebase(UserImageUri);
+
+            }
+        });
+
+
+
+
         Button button = view.findViewById(R.id.btn_save);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,70 +167,75 @@ public class profileFragment extends Fragment {
                     showErrorDialog(getContext(), "Please enter your address.");
                 }else if(editText5.getText().toString().isEmpty()){
                     showErrorDialog(getContext(), "Please enter your city.");
+                }else if(UserImageUri == null){
+                    showErrorDialog(getContext(), "Please select image.");
                 }else {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Gson gson = new Gson();
-                            JsonObject user = new JsonObject();
-                            user.addProperty("id", id);
-                            user.addProperty("name", editText1.getText().toString());
-                            user.addProperty("password", editText2.getText().toString());
-                            user.addProperty("mobile", editText3.getText().toString());
-                            user.addProperty("address", editText4.getText().toString());
-                            user.addProperty("city", editText5.getText().toString());
 
-
-                            OkHttpClient okHttpClient = new OkHttpClient();
-
-                            RequestBody requestBody = RequestBody.create(gson.toJson(user), MediaType.get("application/json"));
-
-                            Request request = new Request.Builder()
-                                    .url("http://192.168.1.2:8080/colors/user/profileUpdate")
-                                    .post(requestBody)
-                                    .build();
-
-                            try {
-
-                                Response response = okHttpClient.newCall(request).execute();
-                                String responsetext = response.body().string();
-
-                                ResponseDTO<User_DTO> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseDTO<User_DTO>>(){}.getType());
-
-
-
-
-                                if (responseDTO.isSuccess()) {
-
-                                    User_DTO userDTO = responseDTO.getContent();
-
-//                                    Log.i("colors-log", "User Name: " + userDTO.getName());
-                                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    String userjson = gson.toJson(userDTO);
-                                    editor.putString("userData",userjson);
-                                    editor.apply();
-
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            showSuccessDialog(context, "Success");
-                                        }
-                                    });
-
-
-
-                                } else {
-                                    showErrorDialog(getContext(), "something went wrong");
-
-                                }
-
-
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }).start();
+                    uploadImageToFirebase(UserImageUri);
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            Gson gson = new Gson();
+//                            JsonObject user = new JsonObject();
+//                            user.addProperty("id", id);
+//                            user.addProperty("name", editText1.getText().toString());
+//                            user.addProperty("password", editText2.getText().toString());
+//                            user.addProperty("mobile", editText3.getText().toString());
+//                            user.addProperty("address", editText4.getText().toString());
+//                            user.addProperty("city", editText5.getText().toString());
+//
+//
+//                            OkHttpClient okHttpClient = new OkHttpClient();
+//
+//                            RequestBody requestBody = RequestBody.create(gson.toJson(user), MediaType.get("application/json"));
+//
+//                            Request request = new Request.Builder()
+//                                    .url("http://192.168.1.2:8080/colors/user/profileUpdate")
+//                                    .post(requestBody)
+//                                    .build();
+//
+//                            try {
+//
+//                                Response response = okHttpClient.newCall(request).execute();
+//                                String responsetext = response.body().string();
+//
+//                                ResponseDTO<User_DTO> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseDTO<User_DTO>>(){}.getType());
+//
+//
+//
+//
+//                                if (responseDTO.isSuccess()) {
+//
+//                                    User_DTO userDTO = responseDTO.getContent();
+//
+////                                    Log.i("colors-log", "User Name: " + userDTO.getName());
+//                                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
+//                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                                    String userjson = gson.toJson(userDTO);
+//                                    editor.putString("userData",userjson);
+//                                    editor.apply();
+//
+//                                    getActivity().runOnUiThread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            showSuccessDialog(context, "Success");
+//                                        }
+//                                    });
+//
+//
+//
+//                                } else {
+//                                    showErrorDialog(getContext(), "something went wrong");
+//
+//                                }
+//
+//
+//                            } catch (Exception e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                        }
+//                    }).start();
                 }
 
 
@@ -183,6 +245,102 @@ public class profileFragment extends Fragment {
         return view;
     }
 
+    private void uploadImageToFirebase(Uri imageUri) {
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("images/" + System.currentTimeMillis() + ".jpg");
+
+        storageRef.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String imageUrl = uri.toString();
+                                Log.d("Firebase", "Image URL: " + imageUrl);
+                                // Send imageUrl to backend or use it directly
+
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Integer id = user.getId();
+                                        Gson gson = new Gson();
+                                        JsonObject user = new JsonObject();
+                                        user.addProperty("id", id);
+                                        user.addProperty("name", editText1.getText().toString());
+                                        user.addProperty("password", editText2.getText().toString());
+                                        user.addProperty("mobile", editText3.getText().toString());
+                                        user.addProperty("address", editText4.getText().toString());
+                                        user.addProperty("city", editText5.getText().toString());
+                                        user.addProperty("image_path", imageUrl);
+
+
+                                        OkHttpClient okHttpClient = new OkHttpClient();
+
+                                        RequestBody requestBody = RequestBody.create(gson.toJson(user), MediaType.get("application/json"));
+
+                                        Request request = new Request.Builder()
+                                                .url("http://192.168.1.4:8080/colors/user/profileUpdate")
+                                                .post(requestBody)
+                                                .build();
+
+                                        try {
+
+                                            Response response = okHttpClient.newCall(request).execute();
+                                            String responsetext = response.body().string();
+
+                                            ResponseDTO<User_DTO> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseDTO<User_DTO>>(){}.getType());
+
+
+
+
+                                            if (responseDTO.isSuccess()) {
+
+                                                User_DTO userDTO = responseDTO.getContent();
+
+//                                    Log.i("colors-log", "User Name: " + userDTO.getName());
+                                                SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                String userjson = gson.toJson(userDTO);
+                                                editor.putString("userData",userjson);
+                                                editor.apply();
+
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        showSuccessDialog(context, "Success");
+                                                    }
+                                                });
+
+
+
+                                            } else {
+                                                showErrorDialog(getContext(), "something went wrong");
+
+                                            }
+
+
+                                        } catch (Exception e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }
+                                }).start();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("Firebase", "Failed to get download URL", e);
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Firebase", "Upload failed", e);
+                    }
+                });
+    }
 
     public void showErrorDialog(Context context, String errorMessage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

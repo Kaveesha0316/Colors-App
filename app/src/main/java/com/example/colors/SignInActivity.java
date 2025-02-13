@@ -76,6 +76,7 @@ public class SignInActivity extends AppCompatActivity {
         textView1.startAnimation(slideUp);
         textView2.startAnimation(slideUp);
 
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,8 +125,6 @@ public class SignInActivity extends AppCompatActivity {
                                 ResponseDTO<User_DTO> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseDTO<User_DTO>>(){}.getType());
 
                                 Log.i("colors-log", responsetext);
-
-
 
 
                                 if (responseDTO.isSuccess()) {
