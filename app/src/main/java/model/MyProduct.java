@@ -7,14 +7,60 @@ public class MyProduct {
     private String av_qty;
     private String sl_qty;
     private String profit;
+    private String imgpath;
+    private Integer status;
 
-    public MyProduct(String name, String price, String av_qty, String sl_qty, String profit,String id) {
+    private String imgpath2;
+    private String imgpath3;
+    private String description;
+    private String category;
+
+
+    public MyProduct(String id, String name, String price, String av_qty, String sl_qty, String profit, String imgpath, Integer status, String imgpath2, String imgpath3, String description, String category) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.av_qty = av_qty;
         this.sl_qty = sl_qty;
         this.profit = profit;
-        this.id=id;
+        this.imgpath = imgpath;
+        this.status = status;
+        this.imgpath2 = imgpath2;
+        this.imgpath3 = imgpath3;
+        this.description = description;
+        this.category = category;
+    }
+
+    public String getImgpath2() {
+        return imgpath2;
+    }
+
+    public void setImgpath2(String imgpath2) {
+        this.imgpath2 = imgpath2;
+    }
+
+    public String getImgpath3() {
+        return imgpath3;
+    }
+
+    public void setImgpath3(String imgpath3) {
+        this.imgpath3 = imgpath3;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getId() {
@@ -63,5 +109,21 @@ public class MyProduct {
 
     public void setProfit(String profit) {
         this.profit = profit;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getImgpath() {
+        return imgpath;
+    }
+
+    public void setImgpath(String imgpath) {
+        this.imgpath = imgpath;
     }
 }

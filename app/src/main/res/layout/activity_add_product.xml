@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -77,10 +84,23 @@
         android:id="@+id/textView43"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="28dp"
         android:fontFamily="@font/lato_regular"
         android:text="@string/addproduct_t6"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/lato_regular"
+        android:text="@string/addproduct_t9"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +128,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/edittext_background"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="number|numberDecimal"
         android:paddingLeft="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.459"
@@ -211,4 +231,19 @@
         app:layout_constraintTop_toTopOf="@+id/addproductimageView1"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/add" />
+
+    <EditText
+        android:id="@+id/editTextTextMultiLine"
+        android:layout_width="351dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edittext_background"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:padding="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

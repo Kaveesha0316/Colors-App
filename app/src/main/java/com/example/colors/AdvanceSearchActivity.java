@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -39,6 +40,7 @@ import java.util.List;
 
 import DTO.Product_DTO;
 import DTO.ResponseListDTO;
+import DTO.ReturnProductDTO;
 import model.Product;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -331,11 +333,11 @@ public class AdvanceSearchActivity extends AppCompatActivity {
 
                         Log.i("colors-log", responsetext);
 
-                        ResponseListDTO<Product_DTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<Product_DTO>>(){}.getType());
+                        ResponseListDTO<ReturnProductDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<ReturnProductDTO>>(){}.getType());
 
                         if (responseDTO.isSuccess()) {
 
-                            List<Product_DTO> product_dtoList = responseDTO.getContent();
+                            List<ReturnProductDTO> product_dtoList = responseDTO.getContent();
 
 
                            runOnUiThread(new Runnable() {
@@ -343,8 +345,8 @@ public class AdvanceSearchActivity extends AppCompatActivity {
                                 public void run() {
                                     ArrayList<Product> productList =   new ArrayList<>();
 
-                                    for (Product_DTO product:product_dtoList){
-                                        productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice())));
+                                    for (ReturnProductDTO product:product_dtoList){
+                                        productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice()),product.getQty(),product.getStatus(),product.getDescription(),product.getCategory(),product.getImgpath1(),product.getImgpath2(),product.getImgpath3()));
 
                                     }
 
@@ -385,6 +387,8 @@ class  SaerchProductAdapter extends RecyclerView.Adapter<SaerchProductAdapter.Sa
         public TextView textView2;
         public Button Button1;
         public CardView cardView;
+
+        public  ImageView productImage;
         public SaerchProductViewHolder(@NonNull View itemView) {
             super(itemView);
             textView1 = itemView.findViewById(R.id.myproductTitle);
@@ -392,6 +396,7 @@ class  SaerchProductAdapter extends RecyclerView.Adapter<SaerchProductAdapter.Sa
 //            imageView = itemView.findViewById(R.id.productImage);
             Button1 = itemView.findViewById(R.id.UpdateButton);
             cardView = itemView.findViewById(R.id.Myproduct_card_view);
+            productImage = itemView.findViewById(R.id.myproductImage);
         }
     }
 
@@ -422,6 +427,12 @@ class  SaerchProductAdapter extends RecyclerView.Adapter<SaerchProductAdapter.Sa
         holder.textView1.setText(productArrayList.get(position).getName());
         holder.textView2.setText(productArrayList.get(position).getPrice());
 //        holder.imageView.setText(productArrayList.get(position).getId());
+
+        Glide.with(context)
+                .load(productArrayList.get(position).getImgpath1())
+                .placeholder(R.drawable.loading) // Optional: Placeholder image
+                .error(R.drawable.mark) // Optional: Error image
+                .into(holder.productImage);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,10 +1,9 @@
-package model;
+package DTO;
 
-public class Product {
-
-    private String id;
+public class ReturnProductDTO {
+    private Integer id;
     private String name;
-    private String price;
+    private Double price;
     private Integer qty;
     private Integer status;
     private String description;
@@ -13,17 +12,31 @@ public class Product {
     private String imgpath2;
     private String imgpath3;
 
-    public Product(String id, String name, String price, Integer qty, Integer status, String description, String category, String imgpath1, String imgpath2, String imgpath3) {
+    public ReturnProductDTO() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
         this.price = price;
-        this.qty = qty;
-        this.status = status;
-        this.description = description;
-        this.category = category;
-        this.imgpath1 = imgpath1;
-        this.imgpath2 = imgpath2;
-        this.imgpath3 = imgpath3;
     }
 
     public Integer getQty() {
@@ -80,29 +93,5 @@ public class Product {
 
     public void setImgpath3(String imgpath3) {
         this.imgpath3 = imgpath3;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
     }
 }

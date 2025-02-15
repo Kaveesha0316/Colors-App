@@ -1,5 +1,6 @@
 package com.example.colors.ui.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.aemerse.slider.ImageCarousel;
 import com.aemerse.slider.model.CarouselItem;
+import com.bumptech.glide.Glide;
 import com.example.colors.AdvanceSearchActivity;
 import com.example.colors.R;
 import com.example.colors.SingleProductActivity;
@@ -41,7 +43,9 @@ import java.util.List;
 import DTO.Product_DTO;
 import DTO.ResponseDTO;
 import DTO.ResponseListDTO;
+import DTO.ReturnProductDTO;
 import DTO.User_DTO;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import model.Product;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -55,6 +59,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class HomeFragment extends Fragment {
 
         setupImageCarousel();
         setCategoryItem();
+
 
         new Thread(new Runnable() {
             @Override
@@ -91,11 +97,11 @@ public class HomeFragment extends Fragment {
 
                              Log.i("colors-log", responsetext);
 
-                    ResponseListDTO<Product_DTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<Product_DTO>>(){}.getType());
+                    ResponseListDTO<ReturnProductDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<ReturnProductDTO>>(){}.getType());
 
                     if (responseDTO.isSuccess()) {
 
-                        List<Product_DTO> product_dtoList = responseDTO.getContent();
+                        List<ReturnProductDTO> product_dtoList = responseDTO.getContent();
 
 
 
@@ -104,8 +110,8 @@ public class HomeFragment extends Fragment {
                                         public void run() {
                                             ArrayList<Product> productList =   new ArrayList<>();
 
-                                            for (Product_DTO product:product_dtoList){
-                                                productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice())));
+                                            for (ReturnProductDTO product:product_dtoList){
+                                                productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice()),product.getQty(),product.getStatus(),product.getDescription(),product.getCategory(),product.getImgpath1(),product.getImgpath2(),product.getImgpath3()));
 
                                             }
 
@@ -178,11 +184,11 @@ public class HomeFragment extends Fragment {
 
                             Log.i("colors-log", responsetext);
 
-                            ResponseListDTO<Product_DTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<Product_DTO>>(){}.getType());
+                            ResponseListDTO<ReturnProductDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<ReturnProductDTO>>(){}.getType());
 
                             if (responseDTO.isSuccess()) {
 
-                                List<Product_DTO> product_dtoList = responseDTO.getContent();
+                                List<ReturnProductDTO> product_dtoList = responseDTO.getContent();
 
 
 
@@ -191,8 +197,8 @@ public class HomeFragment extends Fragment {
                                     public void run() {
                                         ArrayList<Product> productList =   new ArrayList<>();
 
-                                        for (Product_DTO product:product_dtoList){
-                                            productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice())));
+                                        for (ReturnProductDTO product:product_dtoList){
+                                            productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice()),product.getQty(),product.getStatus(),product.getDescription(),product.getCategory(),product.getImgpath1(),product.getImgpath2(),product.getImgpath3()));
 
                                         }
 
@@ -294,7 +300,7 @@ public class HomeFragment extends Fragment {
 
 
 class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
-
+    public User_DTO user;
     class ProductViewHolder extends RecyclerView.ViewHolder{
 
 //        public ImageView imageView;
@@ -302,6 +308,8 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
         public TextView textView2;
         public Button Button1;
         public CardView cardView;
+
+        public  ImageView productImage;
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             textView1 = itemView.findViewById(R.id.myproductTitle);
@@ -309,6 +317,7 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
 //            imageView = itemView.findViewById(R.id.productImage);
             Button1 = itemView.findViewById(R.id.UpdateButton);
             cardView = itemView.findViewById(R.id.Myproduct_card_view);
+            productImage = itemView.findViewById(R.id.myproductImage);
         }
     }
 
@@ -337,19 +346,122 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
         Product product = productArrayList.get(position);
 
         holder.textView1.setText(productArrayList.get(position).getName());
-        holder.textView2.setText(productArrayList.get(position).getPrice());
-//        holder.imageView.setText(productArrayList.get(position).getId());
+        holder.textView2.setText( "Rs."+productArrayList.get(position).getPrice());
+
+
+        Glide.with(context)
+                .load(productArrayList.get(position).getImgpath1())
+                .placeholder(R.drawable.loading) // Optional: Placeholder image
+                .error(R.drawable.mark) // Optional: Error image
+                .into(holder.productImage);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(context, SingleProductActivity.class);
                 intent.putExtra("productId", product.getId());
                 intent.putExtra("productName", product.getName());
                 intent.putExtra("productPrice", product.getPrice());
+                intent.putExtra("qty", String.valueOf(product.getQty()));
+                intent.putExtra("description", product.getDescription());
+                intent.putExtra("category", product.getCategory());
+                intent.putExtra("imgpath1", product.getImgpath1());
+                intent.putExtra("imgpath2", product.getImgpath2());
+                intent.putExtra("imgpath3", product.getImgpath3());
                 context.startActivity(intent);
             }
         });
+        if (product.getQty() == 0){
+            holder.Button1.setEnabled(false);
+            holder.Button1.setText("Out of stock");
+            holder.Button1.setBackgroundColor(context.getColor(R.color.terracotta));
+        }
+        holder.Button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences sharedPreferences = context.getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
+                String userjson = sharedPreferences.getString("userData",null);
+
+                if (userjson != null) {
+                    Gson gson = new Gson();
+
+                    user = gson.fromJson(userjson, User_DTO.class);
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Gson gson = new Gson();
+
+                        OkHttpClient okHttpClient = new OkHttpClient();
+
+                        // Build URL with query parameters dynamically
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/add")
+                                .newBuilder();
+                        urlBuilder.addQueryParameter("qty", "1");
+                        urlBuilder.addQueryParameter("product_id", product.getId());
+
+                        urlBuilder.addQueryParameter("user_id",String.valueOf(user.getId()));
+
+                        // Convert to URL string
+                        String url = urlBuilder.build().toString();
+
+                        // Create request
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .build();
+
+
+                        try {
+
+                            Response response = okHttpClient.newCall(request).execute();
+                            String responsetext = response.body().string();
+
+                            Log.i("colors-log", responsetext);
+
+                            ResponseDTO<String> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseDTO<String>>(){}.getType());
+
+                            if (responseDTO.isSuccess()) {
+                                String message = responseDTO.getMessage();
+                                if (message.equals("add")){
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                                    .setTitleText("Success!")
+                                                    .setContentText("Product added to your cart.")
+                                                    .show();
+                                        }
+                                    });
+                                }else {
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                                    .setTitleText("Success!")
+                                                    .setContentText("Product quantity updated.")
+                                                    .show();
+                                        }
+                                    });
+                                }
+                            } else {
+
+
+                            }
+
+
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+                }).start();
+
+            }
+        });
+
     }
 
 
