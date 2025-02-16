@@ -1,45 +1,133 @@
 package com.example.colors.ui.orders;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.colors.AdvanceSearchActivity;
 import com.example.colors.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import DTO.MyOrderDTO;
+import DTO.ResponseListDTO;
+import DTO.ReturnProductDTO;
+import DTO.User_DTO;
 import model.Order;
+import model.Product;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class OrdersFragment extends Fragment {
+
+    User_DTO user;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
 
-        ArrayList<Order> orderArrayList = new ArrayList<>();
-        orderArrayList.add(new Order("Test 1","10","2510.00","2024-08-24","Delivered"));
-        orderArrayList.add(new Order("Test 2","8","1000.00","2024-08-25","Shiped"));
-        orderArrayList.add(new Order("Test 6","45","100.00","2024-08-12","Pecked"));
-        orderArrayList.add(new Order("Test 4","20","240.00","2024-08-27","Return"));
-        RecyclerView recyclerView = view.findViewById(R.id.order_recylcle_view);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
+        String userjson = sharedPreferences.getString("userData", null);
+        if (userjson != null) {
+            user = new Gson().fromJson(userjson, User_DTO.class);
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Gson gson = new Gson();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                OkHttpClient okHttpClient = new OkHttpClient();
 
-        recyclerView.setLayoutManager(linearLayoutManager);
+                // Build URL with query parameters dynamically
+                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/order/load")
+                        .newBuilder();
+                urlBuilder.addQueryParameter("userId", String.valueOf(user.getId()));
 
-       OrderAdapter orderAdapter = new OrderAdapter(orderArrayList);
-       recyclerView.setAdapter(orderAdapter);
+                // Convert to URL string
+                String url = urlBuilder.build().toString();
+
+                // Create request
+                Request request = new Request.Builder()
+                        .url(url)
+                        .build();
+
+                try {
+
+                    Response response = okHttpClient.newCall(request).execute();
+                    String responsetext = response.body().string();
+
+                    Log.i("colors-log-order", responsetext);
+
+                    ResponseListDTO<MyOrderDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<MyOrderDTO>>(){}.getType());
+
+                    if (responseDTO.isSuccess()) {
+
+                        List<MyOrderDTO> product_dtoList = responseDTO.getContent();
+
+
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ArrayList<Order> orderArrayList = new ArrayList<>();
+
+                                for (MyOrderDTO product:product_dtoList){
+                                    orderArrayList.add(new Order(product.getName(),product.getQty(),product.getPrice(),product.getDate(),product.getStatus(),product.getImageUrl()));
+
+
+                                }
+
+
+                                RecyclerView recyclerView = view.findViewById(R.id.order_recylcle_view);
+
+                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+                                recyclerView.setLayoutManager(linearLayoutManager);
+
+                                OrderAdapter orderAdapter = new OrderAdapter(getContext(),orderArrayList);
+                                recyclerView.setAdapter(orderAdapter);                            }
+                        });
+                    } else {
+
+
+                    }
+
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+
+            }
+        }).start();
 
 
 
@@ -48,7 +136,7 @@ public class OrdersFragment extends Fragment {
 }
 
 class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.orderViewHolder>{
-
+Context context;
     static  class orderViewHolder extends  RecyclerView.ViewHolder{
 
         TextView textView1 ;
@@ -56,6 +144,7 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.orderViewHolder>{
         TextView textView3 ;
         TextView textView4 ;
         Button button1 ;
+        ImageView imageView1;
         public orderViewHolder(@NonNull View itemView) {
             super(itemView);
             textView1 = itemView.findViewById(R.id.order_product_name);
@@ -63,12 +152,14 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.orderViewHolder>{
             textView3 = itemView.findViewById(R.id.order_product_price);
             button1 = itemView.findViewById(R.id.order_status);
             textView4 = itemView.findViewById(R.id.order_product_date);
+            imageView1 = itemView.findViewById(R.id.cart_product_image);
         }
     }
      ArrayList<Order> orderArrayList;
 
-    public OrderAdapter(ArrayList<Order> orderArrayList) {
+    public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
         this.orderArrayList = orderArrayList;
+        this.context = context;
     }
 
     @NonNull
@@ -80,16 +171,56 @@ class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.orderViewHolder>{
         return orderViewHolder;
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull orderViewHolder holder, int position) {
 
         holder.textView1.setText(orderArrayList.get(position).getNamae());
         holder.textView2.setText(orderArrayList.get(position).getQty());
-        holder.textView3.setText(orderArrayList.get(position).getPrice());
-        holder.textView4.setText(orderArrayList.get(position).getDate());
+        holder.textView3.setText("Rs."+orderArrayList.get(position).getPrice()+"0");
+
+
+        String inputDate = orderArrayList.get(position).getDate(); // "2025-02-15 12:50:28"
+
+// Step 1: Define the input format (same as the string format)
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+// Step 2: Define the desired output format
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm a");
+
+        try {
+            // Convert String to Date
+            Date date = inputFormat.parse(inputDate);
+
+            // Format Date to desired output
+            String formattedDate = outputFormat.format(date);
+
+            // Set the formatted date to TextView
+            holder.textView4.setText(formattedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            holder.textView4.setText(inputDate); // Fallback to original if parsing fails
+        }
+
+
+
         holder.button1.setText(orderArrayList.get(position).getStatus());
 
+        if (orderArrayList.get(position).getStatus().equals("Processing")){
+            holder.button1.setBackgroundColor(context.getColor(R.color.red));
+        }else if (orderArrayList.get(position).getStatus().equals("Packed")){
+            holder.button1.setBackgroundColor(context.getColor(R.color.olive_green));
+        }else if (orderArrayList.get(position).getStatus().equals("Dispatch")){
+            holder.button1.setBackgroundColor(context.getColor(R.color.yellow));
+        }else {
+            holder.button1.setBackgroundColor(context.getColor(R.color.black));
+        }
 
+        Glide.with(context)
+                .load(orderArrayList.get(position).getImageUrl())
+                .placeholder(R.drawable.loading) // Optional: Placeholder image
+                .error(R.drawable.mark) // Optional: Error image
+                .into(holder.imageView1);
     }
 
     @Override

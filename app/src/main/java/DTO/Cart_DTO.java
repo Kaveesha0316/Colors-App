@@ -10,17 +10,19 @@ public class Cart_DTO {
 
 
     private int id;
-
-
     private String qty;
+    private String product_name;
+    private Double product_price;
+    private String product_imagepath;
+    private Integer product_Id;
 
+    public Integer getProduct_Id() {
+        return product_Id;
+    }
 
-    private Date date;
-
-    private User_DTO user;
-
-
-    private Product_DTO product;
+    public void setProduct_Id(Integer product_Id) {
+        this.product_Id = product_Id;
+    }
 
     public int getId() {
         return id;
@@ -38,27 +40,27 @@ public class Cart_DTO {
         this.qty = qty;
     }
 
-    public Date getDate() {
-        return date;
+    public String getProduct_name() {
+        return product_name;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
     }
 
-    public User_DTO getUser() {
-        return user;
+    public Double getProduct_price() {
+        return product_price;
     }
 
-    public void setUser(User_DTO user) {
-        this.user = user;
+    public void setProduct_price(Double product_price) {
+        this.product_price = product_price;
     }
 
-    public Product_DTO getProduct() {
-        return product;
+    public String getProduct_imagepath() {
+        return product_imagepath;
     }
 
-    public void setProduct(Product_DTO product) {
-        this.product = product;
+    public void setProduct_imagepath(String product_imagepath) {
+        this.product_imagepath = product_imagepath;
     }
 }

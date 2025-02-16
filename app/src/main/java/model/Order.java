@@ -6,14 +6,33 @@ public class Order {
     private String price;
     private String date;
     private String status;
+    private String imageUrl;
 
 
-    public Order(String namae, String qty, String price, String date, String status) {
-        this.name = namae;
+    public Order(String name, String qty, String price, String date, String status, String imageUrl) {
+        this.name = name;
         this.qty = qty;
         this.price = price;
         this.date = date;
         this.status = status;
+        this.imageUrl = imageUrl;
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getStatus() {

@@ -44,7 +44,7 @@
 
     <Button
         android:id="@+id/order_status"
-        android:layout_width="147dp"
+        android:layout_width="160dp"
         android:layout_height="49dp"
         android:layout_marginEnd="16dp"
         android:text="Shiped"
