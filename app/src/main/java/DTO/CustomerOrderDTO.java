@@ -1,56 +1,27 @@
-package model;
+package DTO;
 
-public class CustomerOrder {
-
-    private String id;
+public class CustomerOrderDTO {
+    private Integer orderId;
     private String name;
     private String qty;
     private String price;
     private String date;
+    private String status;
+    private String imageUrl;
     private String cname;
     private String cmobile;
     private String ccity;
-    private String caddrss;
-    private String status;
-    private String image;
+    private String caddress;
 
-    public CustomerOrder(String id, String name, String qty, String price, String date, String cname, String cmobile, String ccity, String caddrss, String status, String image) {
-        this.id = id;
-        this.name = name;
-        this.qty = qty;
-        this.price = price;
-        this.date = date;
-        this.cname = cname;
-        this.cmobile = cmobile;
-        this.ccity = ccity;
-        this.caddrss = caddrss;
-        this.status = status;
-        this.image = image;
-
+    public CustomerOrderDTO() {
     }
 
-    public String getStatus() {
-        return status;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
     public String getName() {
@@ -85,6 +56,22 @@ public class CustomerOrder {
         this.date = date;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getCname() {
         return cname;
     }
@@ -109,11 +96,11 @@ public class CustomerOrder {
         this.ccity = ccity;
     }
 
-    public String getCaddrss() {
-        return caddrss;
+    public String getCaddress() {
+        return caddress;
     }
 
-    public void setCaddrss(String caddrss) {
-        this.caddrss = caddrss;
+    public void setCaddress(String caddress) {
+        this.caddress = caddress;
     }
 }

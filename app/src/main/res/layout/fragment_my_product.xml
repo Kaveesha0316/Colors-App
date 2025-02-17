@@ -106,11 +106,12 @@
         android:id="@+id/textView30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/lato_regular"
         android:text="@string/myproduct_t4"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/view3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pieChart" />
 
