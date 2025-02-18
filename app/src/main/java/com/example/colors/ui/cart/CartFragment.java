@@ -3,33 +3,59 @@ package com.example.colors.ui.cart;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.example.colors.AddProductActivity;
+import com.example.colors.InvoiceActivityMainActivity;
 import com.example.colors.R;
 import com.example.colors.databinding.FragmentCartBinding;
+import com.example.colors.ui.home.HomeFragment;
+import com.example.colors.ui.profile.DashboardViewModel;
+import com.example.colors.ui.profile.profileFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+
 import DTO.Cart_DTO;
 import DTO.ResponseDTO;
 import DTO.ResponseListDTO;
 import DTO.User_DTO;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import lk.payhere.androidsdk.PHConfigs;
+import lk.payhere.androidsdk.PHConstants;
+import lk.payhere.androidsdk.PHMainActivity;
+import lk.payhere.androidsdk.PHResponse;
+import lk.payhere.androidsdk.model.InitRequest;
+import lk.payhere.androidsdk.model.Item;
+import lk.payhere.androidsdk.model.StatusResponse;
 import model.Cart;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -43,6 +69,35 @@ public class CartFragment extends Fragment {
     ArrayList<Cart> cartArrayList;
     CartAdapter cartAdapter;
     TextView textView21, textView23;
+
+    private  static  final String TAG = "payhare demo";
+
+//    private TextView textView;
+SweetAlertDialog progressDialog;
+
+    private  final ActivityResultLauncher<Intent> payHareLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result ->{
+                if(result.getResultCode() == Activity.RESULT_OK && result.getData() != null){
+                    Intent data = result.getData();
+                    if (data.hasExtra(PHConstants.INTENT_EXTRA_RESULT)){
+                        Serializable serializable = data.getSerializableExtra(PHConstants.INTENT_EXTRA_RESULT);
+
+
+                        if(serializable instanceof PHResponse){
+                            PHResponse<StatusResponse> response = (PHResponse<StatusResponse>) serializable;
+                            String msg = response.isSuccess() ?"Payment success"+response.getData():"Payment Faild"+response;
+                            Log.i(TAG,msg);
+//                            textView.setText(msg);
+                            progressDialog.dismissWithAnimation();
+                            removeperchesproduct();
+                        }
+                    }
+                }else if (result.getResultCode() == Activity.RESULT_CANCELED){
+//                    textView.setText("user canceld the request");
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -82,7 +137,164 @@ public class CartFragment extends Fragment {
         }).attachToRecyclerView(recyclerView);
 
         loadCart();
+
+        Button button = view.findViewById(R.id.button3);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (user.getAddress().equals("")&&user.getCity().equals("")){
+                  new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                      .setTitleText("Warning!")
+                          .setContentText("Please update yor address and city")
+                             .show();
+                    profileFragment fragmentB = new profileFragment();
+
+
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+
+                    fragmentTransaction.replace(R.id.fragment_container, fragmentB);
+
+
+                    fragmentTransaction.addToBackStack(null);
+
+
+                    fragmentTransaction.commit();
+                }else{
+                    new Thread(() -> {
+                        OkHttpClient client = new OkHttpClient();
+                        HttpUrl url = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/loadcart")
+                                .newBuilder()
+                                .addQueryParameter("userId", String.valueOf(user.getId()))
+                                .build();
+                        Request request = new Request.Builder().url(url.toString()).build();
+                        try {
+                            Response response = client.newCall(request).execute();
+
+                            ResponseListDTO<Cart_DTO> responseDTO = new Gson().fromJson(response.body().string(), new TypeToken<ResponseListDTO<Cart_DTO>>() {}.getType());
+                            if (responseDTO.isSuccess()) {
+                                List<Cart_DTO> cartDtoList = responseDTO.getContent();
+                                StringBuilder name = new StringBuilder();
+
+                                for (Cart_DTO cartDto : cartDtoList) {
+                                    name.append(cartDto.getProduct_name())
+                                            .append(" x ")
+                                            .append(cartDto.getQty())
+                                            .append(", ");
+                                }
+
+// Remove trailing comma and space if not empty
+                                if (name.length() > 0) {
+                                    name.setLength(name.length() - 2);
+                                }
+
+                                String result = name.toString();
+                                Log.i("colors-log",result);
+                                getActivity().runOnUiThread(() -> {
+                                    initiatePayment(result);
+
+
+                                });
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
+
+                }
+
+            }
+        });
+
         return view;
+    }
+
+    public void removeperchesproduct(){
+        new Thread(() -> {
+            OkHttpClient client = new OkHttpClient();
+
+            HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/removeperchesproduct")
+                    .newBuilder();
+
+            urlBuilder.addQueryParameter("userId", String.valueOf(user.getId()));
+            urlBuilder.addQueryParameter("total", String.valueOf(total));
+            String url = urlBuilder.build().toString();
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+
+                ResponseDTO<String> responseDTO = new Gson().fromJson(response.body().string(), new TypeToken<ResponseDTO<String>>() {}.getType());
+                if (responseDTO.isSuccess()) {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
+//                                    .setTitleText("Success!")
+//                                    .setContentText("Product was Removed.")
+//                                    .show();
+//                        }
+//                    });
+                    Random random = new Random();
+                    int randomNum = 100000 + random.nextInt(900000); // Generates a 6-digit random number
+                    String orderId = "ORD" + randomNum;
+                    Intent intent = new Intent(requireContext(), InvoiceActivityMainActivity.class);
+                    intent.putExtra("ORDER_ID", orderId);
+                    intent.putExtra("TOTAL_AMOUNT", total);
+                    intent.putExtra("DATE", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                    intent.putExtra("ITEM",cartArrayList);
+                    startActivity(intent);
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private  void initiatePayment(String name){
+        InitRequest req = new InitRequest();
+        req.setMerchantId("1221290");       // Merchant ID
+        req.setCurrency("LKR");             // Currency code LKR/USD/GBP/EUR/AUD
+        req.setAmount(total);             // Final Amount to be charged
+        req.setOrderId("230000123");        // Unique Reference ID
+        req.setItemsDescription(name);  // Item description title
+        req.setCustom1("This is the custom message 1");
+        req.setCustom2("This is the custom message 2");
+        req.getCustomer().setFirstName("Saman");
+        req.getCustomer().setLastName("Perera");
+        req.getCustomer().setEmail("samanp@gmail.com");
+        req.getCustomer().setPhone("+94771234567");
+        req.getCustomer().getAddress().setAddress("No.1, Galle Road");
+        req.getCustomer().getAddress().setCity("Colombo");
+        req.getCustomer().getAddress().setCountry("Sri Lanka");
+
+//Optional Params
+
+        req.getCustomer().getDeliveryAddress().setAddress("No.2, Kandy Road");
+        req.getCustomer().getDeliveryAddress().setCity("Kadawatha");
+        req.getCustomer().getDeliveryAddress().setCountry("Sri Lanka");
+        req.getItems().add(new Item(null, name, 1, 1000.0));
+
+//        req.setNotifyUrl(“https://your-callback-url”);
+
+        Intent intent = new Intent(getContext(), PHMainActivity.class);
+        intent.putExtra(PHConstants.INTENT_EXTRA_DATA, req);
+
+        PHConfigs.setBaseUrl(PHConfigs.SANDBOX_URL);
+
+        payHareLauncher.launch(intent);
+
+        progressDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        progressDialog.setTitleText("Loading...");
+        progressDialog.setCancelable(false); // Prevent dialog from being dismissed by tapping outside
+        progressDialog.show(); // Show the progress dialog
+
+
     }
 
     private void loadCart() {
@@ -120,6 +332,7 @@ public class CartFragment extends Fragment {
         }
         textView21.setText("Rs." + subTotal);
         textView23.setText("Rs." + subTotal);
+        total = subTotal;
     }
 
     private void deleteCartItem(int itemId) {

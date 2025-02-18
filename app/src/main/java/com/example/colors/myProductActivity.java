@@ -300,7 +300,7 @@ class  MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.MyProductV
         holder.textView2.setText(productArrayList.get(position).getPrice());
         holder.textView3.setText(productArrayList.get(position).getAv_qty());
         holder.textView4.setText(productArrayList.get(position).getSl_qty());
-        holder.textView5.setText(productArrayList.get(position).getProfit());
+        holder.textView5.setText("Rs."+productArrayList.get(position).getProfit()+"0");
 
         Glide.with(context)
                 .load(productArrayList.get(position).getImgpath())
