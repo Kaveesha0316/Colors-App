@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.colors.AdvanceSearchActivity;
 import com.example.colors.R;
+import com.example.colors.SqlLite.DatabaseHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -47,22 +50,118 @@ import okhttp3.Response;
 public class OrdersFragment extends Fragment {
 
     User_DTO user;
+    DatabaseHelper databaseHelper;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
 
+        databaseHelper = new DatabaseHelper(getContext());
+
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
         String userjson = sharedPreferences.getString("userData", null);
         if (userjson != null) {
             user = new Gson().fromJson(userjson, User_DTO.class);
         }
+
+        if (isNetworkAvailable()) {
+            // If network is available, fetch data from API
+            fetchOrdersFromApi(view);
+        } else {
+            // If offline, fetch orders from SQLite
+            loadOrdersFromSQLite(view);
+        }
+
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Gson gson = new Gson();
+//
+//                OkHttpClient okHttpClient = new OkHttpClient();
+//
+//                // Build URL with query parameters dynamically
+//                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/order/load")
+//                        .newBuilder();
+//                urlBuilder.addQueryParameter("userId", String.valueOf(user.getId()));
+//
+//                // Convert to URL string
+//                String url = urlBuilder.build().toString();
+//
+//                // Create request
+//                Request request = new Request.Builder()
+//                        .url(url)
+//                        .build();
+//
+//                try {
+//
+//                    Response response = okHttpClient.newCall(request).execute();
+//                    String responsetext = response.body().string();
+//
+//                    Log.i("colors-log-order", responsetext);
+//
+//                    ResponseListDTO<MyOrderDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<MyOrderDTO>>(){}.getType());
+//
+//                    if (responseDTO.isSuccess()) {
+//
+//                        List<MyOrderDTO> product_dtoList = responseDTO.getContent();
+//
+//
+//
+//                        getActivity().runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                ArrayList<Order> orderArrayList = new ArrayList<>();
+//
+//                                for (MyOrderDTO product:product_dtoList){
+//                                    orderArrayList.add(new Order(product.getName(),product.getQty(),product.getPrice(),product.getDate(),product.getStatus(),product.getImageUrl()));
+//
+//
+//                                }
+//
+//
+//                                RecyclerView recyclerView = view.findViewById(R.id.order_recylcle_view);
+//
+//                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//                                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//
+//                                recyclerView.setLayoutManager(linearLayoutManager);
+//
+//                                OrderAdapter orderAdapter = new OrderAdapter(getContext(),orderArrayList);
+//                                recyclerView.setAdapter(orderAdapter);                            }
+//                        });
+//                    } else {
+//
+//
+//                    }
+//
+//
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//
+//            }
+//        }).start();
+
+
+
+        return view;
+    }
+
+    private boolean isNetworkAvailable() {
+        // Implement network check here
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    private void fetchOrdersFromApi(View view) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Gson gson = new Gson();
-
                 OkHttpClient okHttpClient = new OkHttpClient();
 
                 // Build URL with query parameters dynamically
@@ -79,59 +178,59 @@ public class OrdersFragment extends Fragment {
                         .build();
 
                 try {
-
                     Response response = okHttpClient.newCall(request).execute();
                     String responsetext = response.body().string();
-
                     Log.i("colors-log-order", responsetext);
 
-                    ResponseListDTO<MyOrderDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<MyOrderDTO>>(){}.getType());
+                    ResponseListDTO<MyOrderDTO> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseListDTO<MyOrderDTO>>(){}.getType());
 
                     if (responseDTO.isSuccess()) {
-
                         List<MyOrderDTO> product_dtoList = responseDTO.getContent();
 
-
-
+                        databaseHelper.deleteAllOrders();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ArrayList<Order> orderArrayList = new ArrayList<>();
-
-                                for (MyOrderDTO product:product_dtoList){
-                                    orderArrayList.add(new Order(product.getName(),product.getQty(),product.getPrice(),product.getDate(),product.getStatus(),product.getImageUrl()));
-
-
+                                for (MyOrderDTO product : product_dtoList) {
+                                    Order order = new Order(product.getName(), product.getQty(), product.getPrice(), product.getDate(), product.getStatus(), product.getImageUrl());
+                                    databaseHelper.insertOrder(order); // Save order to SQLite
+                                    orderArrayList.add(order);
                                 }
-
-
-                                RecyclerView recyclerView = view.findViewById(R.id.order_recylcle_view);
-
-                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-                                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-                                recyclerView.setLayoutManager(linearLayoutManager);
-
-                                OrderAdapter orderAdapter = new OrderAdapter(getContext(),orderArrayList);
-                                recyclerView.setAdapter(orderAdapter);                            }
+                                displayOrders(view, orderArrayList); // Display orders
+                            }
                         });
-                    } else {
-
-
                     }
-
-
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
-
-
             }
         }).start();
+    }
 
+    private void loadOrdersFromSQLite(View view) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Order> orders = databaseHelper.getAllOrders(); // Load from SQLite
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        displayOrders(view, orders); // Display orders
+                    }
+                });
+            }
+        }).start();
+    }
 
+    private void displayOrders(View view, List<Order> orders) {
+        RecyclerView recyclerView = view.findViewById(R.id.order_recylcle_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-        return view;
+        OrderAdapter orderAdapter = new OrderAdapter(getContext(), orders);
+        recyclerView.setAdapter(orderAdapter);
     }
 }
 
@@ -155,9 +254,9 @@ Context context;
             imageView1 = itemView.findViewById(R.id.cart_product_image);
         }
     }
-     ArrayList<Order> orderArrayList;
+     List<Order> orderArrayList;
 
-    public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
+    public OrderAdapter(Context context, List<Order> orderArrayList) {
         this.orderArrayList = orderArrayList;
         this.context = context;
     }

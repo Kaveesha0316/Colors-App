@@ -64,6 +64,12 @@ public class myProductActivity extends AppCompatActivity {
             return insets;
         });
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         SharedPreferences sharedPreferences = getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
         String userjson = sharedPreferences.getString("userData",null);
 

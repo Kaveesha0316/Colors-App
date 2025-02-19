@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,207 +79,220 @@ public class my_productFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_my_product, container, false);
 
 
-        Button button =  view.findViewById(R.id.button7);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), myProductActivity.class));
+        if (isNetworkAvailable()) {
+
+
+            Button button = view.findViewById(R.id.button7);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getContext(), myProductActivity.class));
+                }
+            });
+
+            Button button2 = view.findViewById(R.id.button5);
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getContext(), CustomerOrderrActivity.class));
+                }
+            });
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
+            String userjson = sharedPreferences.getString("userData", null);
+
+            if (userjson != null) {
+                Gson gson = new Gson();
+
+                user = gson.fromJson(userjson, User_DTO.class);
+
             }
-        });
 
-        Button button2 =  view.findViewById(R.id.button5);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), CustomerOrderrActivity.class));
-            }
-        });
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
-        String userjson = sharedPreferences.getString("userData",null);
+            loadBarchart(view);
+            loadPieChart(view);
 
-        if (userjson != null) {
-            Gson gson = new Gson();
+            TextView textView1 = view.findViewById(R.id.textView33);
+            TextView textView2 = view.findViewById(R.id.textView39);
+            TextView textView3 = view.findViewById(R.id.textView41);
 
-            user = gson.fromJson(userjson, User_DTO.class);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Gson gson = new Gson();
+
+                    OkHttpClient okHttpClient = new OkHttpClient();
+
+                    // Build URL with query parameters dynamically
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/totalqty")
+                            .newBuilder();
+
+                    urlBuilder.addQueryParameter("user_id", String.valueOf(user.getId()));
+
+                    // Convert to URL string
+                    String url = urlBuilder.build().toString();
+
+                    // Create request
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .build();
+
+
+                    try {
+
+                        Response response = okHttpClient.newCall(request).execute();
+                        String responsetext = response.body().string();
+
+                        Log.i("colors-log", responsetext);
+
+                        ResponseDTO<String> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseDTO<String>>() {
+                        }.getType());
+
+                        if (responseDTO.isSuccess()) {
+                            String qty = responseDTO.getContent();
+
+                            ((Activity) getContext()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textView1.setText(qty);
+                                }
+                            });
+
+                        } else {
+
+
+                        }
+
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                }
+            }).start();
+
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Gson gson = new Gson();
+
+                    OkHttpClient okHttpClient = new OkHttpClient();
+
+                    // Build URL with query parameters dynamically
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/totalprofit")
+                            .newBuilder();
+
+                    urlBuilder.addQueryParameter("user_id", String.valueOf(user.getId()));
+
+                    // Convert to URL string
+                    String url = urlBuilder.build().toString();
+
+                    // Create request
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .build();
+
+
+                    try {
+
+                        Response response = okHttpClient.newCall(request).execute();
+                        String responsetext = response.body().string();
+
+                        Log.i("colors-log", responsetext);
+
+                        ResponseDTO<String> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseDTO<String>>() {
+                        }.getType());
+
+                        if (responseDTO.isSuccess()) {
+                            String profit = responseDTO.getContent();
+
+                            ((Activity) getContext()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textView2.setText("Rs." + profit + "0");
+                                }
+                            });
+
+                        } else {
+
+
+                        }
+
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                }
+            }).start();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Gson gson = new Gson();
+
+                    OkHttpClient okHttpClient = new OkHttpClient();
+
+                    // Build URL with query parameters dynamically
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/bestproduct")
+                            .newBuilder();
+
+                    urlBuilder.addQueryParameter("user_id", String.valueOf(user.getId()));
+
+                    // Convert to URL string
+                    String url = urlBuilder.build().toString();
+
+                    // Create request
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .build();
+
+
+                    try {
+
+                        Response response = okHttpClient.newCall(request).execute();
+                        String responsetext = response.body().string();
+
+                        Log.i("colors-log", responsetext);
+
+                        ResponseDTO<String> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseDTO<String>>() {
+                        }.getType());
+
+                        if (responseDTO.isSuccess()) {
+                            String name = responseDTO.getContent();
+
+                            ((Activity) getContext()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textView3.setText(name);
+                                }
+                            });
+
+                        } else {
+
+
+                        }
+
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                }
+            }).start();
 
         }
 
-        loadBarchart(view);
-        loadPieChart(view);
-
-        TextView textView1 = view.findViewById(R.id.textView33);
-        TextView textView2 = view.findViewById(R.id.textView39);
-        TextView textView3 = view.findViewById(R.id.textView41);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Gson gson = new Gson();
-
-                OkHttpClient okHttpClient = new OkHttpClient();
-
-                // Build URL with query parameters dynamically
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/totalqty")
-                        .newBuilder();
-
-                urlBuilder.addQueryParameter("user_id",String.valueOf(user.getId()));
-
-                // Convert to URL string
-                String url = urlBuilder.build().toString();
-
-                // Create request
-                Request request = new Request.Builder()
-                        .url(url)
-                        .build();
-
-
-                try {
-
-                    Response response = okHttpClient.newCall(request).execute();
-                    String responsetext = response.body().string();
-
-                    Log.i("colors-log", responsetext);
-
-                    ResponseDTO<String> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseDTO<String>>(){}.getType());
-
-                    if (responseDTO.isSuccess()) {
-                        String qty = responseDTO.getContent();
-
-                        ((Activity) getContext()).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                               textView1.setText(qty);
-                            }
-                        });
-
-                    } else {
-
-
-                    }
-
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-
-            }
-        }).start();
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Gson gson = new Gson();
-
-                OkHttpClient okHttpClient = new OkHttpClient();
-
-                // Build URL with query parameters dynamically
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/totalprofit")
-                        .newBuilder();
-
-                urlBuilder.addQueryParameter("user_id",String.valueOf(user.getId()));
-
-                // Convert to URL string
-                String url = urlBuilder.build().toString();
-
-                // Create request
-                Request request = new Request.Builder()
-                        .url(url)
-                        .build();
-
-
-                try {
-
-                    Response response = okHttpClient.newCall(request).execute();
-                    String responsetext = response.body().string();
-
-                    Log.i("colors-log", responsetext);
-
-                    ResponseDTO<String> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseDTO<String>>(){}.getType());
-
-                    if (responseDTO.isSuccess()) {
-                        String profit = responseDTO.getContent();
-
-                        ((Activity) getContext()).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                textView2.setText("Rs."+profit+"0");
-                            }
-                        });
-
-                    } else {
-
-
-                    }
-
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Gson gson = new Gson();
-
-                OkHttpClient okHttpClient = new OkHttpClient();
-
-                // Build URL with query parameters dynamically
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/bestproduct")
-                        .newBuilder();
-
-                urlBuilder.addQueryParameter("user_id",String.valueOf(user.getId()));
-
-                // Convert to URL string
-                String url = urlBuilder.build().toString();
-
-                // Create request
-                Request request = new Request.Builder()
-                        .url(url)
-                        .build();
-
-
-                try {
-
-                    Response response = okHttpClient.newCall(request).execute();
-                    String responsetext = response.body().string();
-
-                    Log.i("colors-log", responsetext);
-
-                    ResponseDTO<String> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseDTO<String>>(){}.getType());
-
-                    if (responseDTO.isSuccess()) {
-                        String name = responseDTO.getContent();
-
-                        ((Activity) getContext()).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                textView3.setText(name);
-                            }
-                        });
-
-                    } else {
-
-
-                    }
-
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-
-            }
-        }).start();
-
-
-
         return view;
+    }
+
+    private boolean isNetworkAvailable() {
+        // Implement network check here
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     public  void loadBarchart(View view){

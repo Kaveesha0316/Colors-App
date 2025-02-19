@@ -54,7 +54,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="645dp"
-        android:background="@drawable/logo"
         android:elevation="4dp"
         android:orientation="vertical"
         android:padding="16dp">

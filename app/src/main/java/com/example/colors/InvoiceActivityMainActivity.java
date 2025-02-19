@@ -9,6 +9,7 @@ import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,13 @@ import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,6 +63,9 @@ public class InvoiceActivityMainActivity extends AppCompatActivity {
             return insets;
         });
 
+
+
+
         // Get data from Intent
         Intent intent = getIntent();
         if (intent != null) {
@@ -62,8 +73,6 @@ public class InvoiceActivityMainActivity extends AppCompatActivity {
             totalAmount = intent.getDoubleExtra("TOTAL_AMOUNT", 0.0);
             date = intent.getStringExtra("DATE");
             cartArrayList = (ArrayList<Cart>) getIntent().getSerializableExtra("ITEM");
-
-
 
         }
 

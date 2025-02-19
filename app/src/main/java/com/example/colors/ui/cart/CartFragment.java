@@ -2,9 +2,14 @@ package com.example.colors.ui.cart;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +24,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,6 +39,15 @@ import com.example.colors.databinding.FragmentCartBinding;
 import com.example.colors.ui.home.HomeFragment;
 import com.example.colors.ui.profile.DashboardViewModel;
 import com.example.colors.ui.profile.profileFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -40,6 +55,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -69,7 +85,6 @@ public class CartFragment extends Fragment {
     ArrayList<Cart> cartArrayList;
     CartAdapter cartAdapter;
     TextView textView21, textView23;
-
     private  static  final String TAG = "payhare demo";
 
 //    private TextView textView;
@@ -95,6 +110,7 @@ SweetAlertDialog progressDialog;
                     }
                 }else if (result.getResultCode() == Activity.RESULT_CANCELED){
 //                    textView.setText("user canceld the request");
+                    progressDialog.dismissWithAnimation();
                 }
             }
     );
@@ -113,7 +129,139 @@ SweetAlertDialog progressDialog;
 
         textView21 = view.findViewById(R.id.textView21);
         textView23 = view.findViewById(R.id.textView23);
-        RecyclerView recyclerView = view.findViewById(R.id.cartrecyclerView);
+//        RecyclerView recyclerView = view.findViewById(R.id.cartrecyclerView);
+
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//
+//        cartArrayList = new ArrayList<>();
+//        cartAdapter = new CartAdapter(getContext(), cartArrayList, this);
+//        recyclerView.setAdapter(cartAdapter);
+//
+//        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+//            @Override
+//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//            @Override
+//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                int position = viewHolder.getAdapterPosition();
+//                Cart item = cartArrayList.get(position);
+//                cartArrayList.remove(position);
+//                cartAdapter.notifyItemRemoved(position);
+//                deleteCartItem(item.getId());
+//                updateTotal();
+//            }
+//        }).attachToRecyclerView(recyclerView);
+//
+//        loadCart();
+//
+//        Button button = view.findViewById(R.id.button3);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (user.getAddress().equals("")&&user.getCity().equals("")){
+//                  new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+//                      .setTitleText("Warning!")
+//                          .setContentText("Please update yor address and city")
+//                             .show();
+//                    profileFragment fragmentB = new profileFragment();
+//
+//
+//                    FragmentManager fragmentManager = getParentFragmentManager();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//
+//                    fragmentTransaction.replace(R.id.fragment_container, fragmentB);
+//
+//
+//                    fragmentTransaction.addToBackStack(null);
+//
+//
+//                    fragmentTransaction.commit();
+//                }else{
+//                    new Thread(() -> {
+//                        OkHttpClient client = new OkHttpClient();
+//                        HttpUrl url = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/loadcart")
+//                                .newBuilder()
+//                                .addQueryParameter("userId", String.valueOf(user.getId()))
+//                                .build();
+//                        Request request = new Request.Builder().url(url.toString()).build();
+//                        try {
+//                            Response response = client.newCall(request).execute();
+//
+//                            ResponseListDTO<Cart_DTO> responseDTO = new Gson().fromJson(response.body().string(), new TypeToken<ResponseListDTO<Cart_DTO>>() {}.getType());
+//                            if (responseDTO.isSuccess()) {
+//                                List<Cart_DTO> cartDtoList = responseDTO.getContent();
+//                                StringBuilder name = new StringBuilder();
+//
+//                                for (Cart_DTO cartDto : cartDtoList) {
+//                                    name.append(cartDto.getProduct_name())
+//                                            .append(" x ")
+//                                            .append(cartDto.getQty())
+//                                            .append(", ");
+//                                }
+//
+//// Remove trailing comma and space if not empty
+//                                if (name.length() > 0) {
+//                                    name.setLength(name.length() - 2);
+//                                }
+//
+//                                String result = name.toString();
+//                                Log.i("colors-log",result);
+//                                getActivity().runOnUiThread(() -> {
+//                                    initiatePayment(result);
+//
+//
+//                                });
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }).start();
+//
+//                }
+//
+//            }
+//        });
+//        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+//        firestore.collection("notifications")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(QuerySnapshot value, FirebaseFirestoreException error) {
+//                        if (error != null) {
+//                            Log.w("FirestoreListener", "Listen failed.", error);
+//                            return;
+//                        }
+//
+//                        if (value != null && !value.isEmpty()) {
+//                            for (DocumentSnapshot doc : value.getDocuments()) {
+//                                String notificationMessage = doc.getString("message");
+//                                Log.d("FirestoreListener", "New Notification: " + notificationMessage);
+//                            }
+//                        } else {
+//                            Log.d("FirestoreListener", "No notifications found.");
+//                        }
+//                    }
+//                });
+
+        return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+//        SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
+//        String userjson = sharedPreferences.getString("userData", null);
+//        if (userjson != null) {
+//            user = new Gson().fromJson(userjson, User_DTO.class);
+//        }
+//
+//        textView21 = getActivity().findViewById(R.id.textView21);
+//        textView23 = getActivity().findViewById(R.id.textView23);
+        RecyclerView recyclerView = getActivity().findViewById(R.id.cartrecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         cartArrayList = new ArrayList<>();
@@ -138,16 +286,16 @@ SweetAlertDialog progressDialog;
 
         loadCart();
 
-        Button button = view.findViewById(R.id.button3);
+        Button button = getActivity().findViewById(R.id.button3);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (user.getAddress().equals("")&&user.getCity().equals("")){
-                  new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
-                      .setTitleText("Warning!")
-                          .setContentText("Please update yor address and city")
-                             .show();
+                    new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Warning!")
+                            .setContentText("Please update yor address and city")
+                            .show();
                     profileFragment fragmentB = new profileFragment();
 
 
@@ -207,9 +355,9 @@ SweetAlertDialog progressDialog;
 
             }
         });
-
-        return view;
     }
+
+
 
     public void removeperchesproduct(){
         new Thread(() -> {
@@ -239,6 +387,8 @@ SweetAlertDialog progressDialog;
 //                                    .show();
 //                        }
 //                    });
+
+                    firebaseInsert();
                     Random random = new Random();
                     int randomNum = 100000 + random.nextInt(900000); // Generates a 6-digit random number
                     String orderId = "ORD" + randomNum;
@@ -254,6 +404,30 @@ SweetAlertDialog progressDialog;
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    public void  firebaseInsert(){
+
+
+        HashMap<String,Object> document = new HashMap<>();
+        document.put("message","dfsdf");
+        document.put("name","sdfsdfdsfdfsf");
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        firestore.collection("notification").add(document)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.i("colors-log", "onSuccess");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("colors-log", "error");
+                    }
+                });
+
     }
 
     private  void initiatePayment(String name){

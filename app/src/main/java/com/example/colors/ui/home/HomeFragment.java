@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -66,66 +68,343 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+//        setupImageCarousel();
+//        setCategoryItem();
+//
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Gson gson = new Gson();
+//
+//                OkHttpClient okHttpClient = new OkHttpClient();
+//
+//                // Build URL with query parameters dynamically
+//                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
+//                        .newBuilder();
+//                urlBuilder.addQueryParameter("searchText", "");
+//
+//               // Convert to URL string
+//                String url = urlBuilder.build().toString();
+//
+//                // Create request
+//                Request request = new Request.Builder()
+//                        .url(url)
+//                        .build();
+//
+//                try {
+//
+//                    Response response = okHttpClient.newCall(request).execute();
+//                    String responsetext = response.body().string();
+//
+//                             Log.i("colors-log", responsetext);
+//
+//                    ResponseListDTO<ReturnProductDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<ReturnProductDTO>>(){}.getType());
+//
+//                    if (responseDTO.isSuccess()) {
+//
+//                        List<ReturnProductDTO> product_dtoList = responseDTO.getContent();
+//
+//
+//
+//                                    getActivity().runOnUiThread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            ArrayList<Product> productList =   new ArrayList<>();
+//
+//                                            for (ReturnProductDTO product:product_dtoList){
+//                                                productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice()),product.getQty(),product.getStatus(),product.getDescription(),product.getCategory(),product.getImgpath1(),product.getImgpath2(),product.getImgpath3()));
+//
+//                                            }
+//
+//
+//                                            RecyclerView recyclerView = view.findViewById(R.id.productrecyclerView);
+//
+//
+//                                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
+//
+//                                            ProductAdapter productAdapter = new ProductAdapter(getContext(),productList);
+//                                            recyclerView.setAdapter(productAdapter);
+//
+//
+//                                            ImageButton imageButton = view.findViewById(R.id.advancesearchimageButton);
+//                                            imageButton.setOnClickListener(new View.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(View view) {
+//                                                    Intent intent = new Intent(getContext(), AdvanceSearchActivity.class);
+//                                                    startActivity(intent);
+//                                                }
+//                                            });
+//                                        }
+//                                    });
+//                    } else {
+//
+//
+//                    }
+//
+//
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//
+//            }
+//        }).start();
+//
+//        TextInputEditText searchEditText = view.findViewById(R.id.SearchtextInputEditText);
+//        searchEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Gson gson = new Gson();
+//
+//                        OkHttpClient okHttpClient = new OkHttpClient();
+//
+//                        // Build URL with query parameters dynamically
+//                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
+//                                .newBuilder();
+//                        urlBuilder.addQueryParameter("searchText", searchEditText.getText().toString());
+//
+//                        // Convert to URL string
+//                        String url = urlBuilder.build().toString();
+//
+//                        // Create request
+//                        Request request = new Request.Builder()
+//                                .url(url)
+//                                .build();
+//
+//                        try {
+//
+//                            Response response = okHttpClient.newCall(request).execute();
+//                            String responsetext = response.body().string();
+//
+//                            Log.i("colors-log", responsetext);
+//
+//                            ResponseListDTO<ReturnProductDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<ReturnProductDTO>>(){}.getType());
+//
+//                            if (responseDTO.isSuccess()) {
+//
+//                                List<ReturnProductDTO> product_dtoList = responseDTO.getContent();
+//
+//
+//
+//                                getActivity().runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        ArrayList<Product> productList =   new ArrayList<>();
+//
+//                                        for (ReturnProductDTO product:product_dtoList){
+//                                            productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice()),product.getQty(),product.getStatus(),product.getDescription(),product.getCategory(),product.getImgpath1(),product.getImgpath2(),product.getImgpath3()));
+//
+//                                        }
+//
+//
+//                                        RecyclerView recyclerView = view.findViewById(R.id.productrecyclerView);
+//
+//
+//                                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
+//
+//                                        ProductAdapter productAdapter = new ProductAdapter(getContext(),productList);
+//                                        recyclerView.setAdapter(productAdapter);
+//
+//
+//                                        ImageButton imageButton = view.findViewById(R.id.advancesearchimageButton);
+//                                        imageButton.setOnClickListener(new View.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(View view) {
+//                                                Intent intent = new Intent(getContext(), AdvanceSearchActivity.class);
+//                                                startActivity(intent);
+//                                            }
+//                                        });
+//                                    }
+//                                });
+//                            } else {
+//
+//
+//                            }
+//
+//
+//                        } catch (Exception e) {
+//                            throw new RuntimeException(e);
+//                        }
+//
+//
+//                    }
+//
+//                }).start();
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//            }
+//        });
+
+
+
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         setupImageCarousel();
         setCategoryItem();
+        if (isNetworkAvailable()) {
 
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Gson gson = new Gson();
 
-                OkHttpClient okHttpClient = new OkHttpClient();
 
-                // Build URL with query parameters dynamically
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
-                        .newBuilder();
-                urlBuilder.addQueryParameter("searchText", "");
 
-               // Convert to URL string
-                String url = urlBuilder.build().toString();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Gson gson = new Gson();
 
-                // Create request
-                Request request = new Request.Builder()
-                        .url(url)
-                        .build();
+                    OkHttpClient okHttpClient = new OkHttpClient();
 
-                try {
+                    // Build URL with query parameters dynamically
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
+                            .newBuilder();
+                    urlBuilder.addQueryParameter("searchText", "");
 
-                    Response response = okHttpClient.newCall(request).execute();
-                    String responsetext = response.body().string();
+                    // Convert to URL string
+                    String url = urlBuilder.build().toString();
 
-                             Log.i("colors-log", responsetext);
+                    // Create request
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .build();
 
-                    ResponseListDTO<ReturnProductDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<ReturnProductDTO>>(){}.getType());
+                    try {
 
-                    if (responseDTO.isSuccess()) {
+                        Response response = okHttpClient.newCall(request).execute();
+                        String responsetext = response.body().string();
 
-                        List<ReturnProductDTO> product_dtoList = responseDTO.getContent();
+                        Log.i("colors-log", responsetext);
 
+                        ResponseListDTO<ReturnProductDTO> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseListDTO<ReturnProductDTO>>() {
+                        }.getType());
+
+                        if (responseDTO.isSuccess()) {
+
+                            List<ReturnProductDTO> product_dtoList = responseDTO.getContent();
+
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ArrayList<Product> productList = new ArrayList<>();
+
+                                    for (ReturnProductDTO product : product_dtoList) {
+                                        productList.add(new Product(String.valueOf(product.getId()), product.getName(), String.valueOf(product.getPrice()), product.getQty(), product.getStatus(), product.getDescription(), product.getCategory(), product.getImgpath1(), product.getImgpath2(), product.getImgpath3()));
+
+                                    }
+
+
+                                    RecyclerView recyclerView = getActivity().findViewById(R.id.productrecyclerView);
+
+
+                                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
+
+                                    ProductAdapter productAdapter = new ProductAdapter(getContext(), productList);
+                                    recyclerView.setAdapter(productAdapter);
+
+
+                                    ImageButton imageButton = getActivity().findViewById(R.id.advancesearchimageButton);
+                                    imageButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent(getContext(), AdvanceSearchActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+
+
+                        }
+
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+                }
+            }).start();
+
+            TextInputEditText searchEditText = getActivity().findViewById(R.id.SearchtextInputEditText);
+            searchEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Gson gson = new Gson();
+
+                            OkHttpClient okHttpClient = new OkHttpClient();
+
+                            // Build URL with query parameters dynamically
+                            HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
+                                    .newBuilder();
+                            urlBuilder.addQueryParameter("searchText", searchEditText.getText().toString());
+
+                            // Convert to URL string
+                            String url = urlBuilder.build().toString();
+
+                            // Create request
+                            Request request = new Request.Builder()
+                                    .url(url)
+                                    .build();
+
+                            try {
+
+                                Response response = okHttpClient.newCall(request).execute();
+                                String responsetext = response.body().string();
+
+                                Log.i("colors-log", responsetext);
+
+                                ResponseListDTO<ReturnProductDTO> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseListDTO<ReturnProductDTO>>() {
+                                }.getType());
+
+                                if (responseDTO.isSuccess()) {
+
+                                    List<ReturnProductDTO> product_dtoList = responseDTO.getContent();
 
 
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            ArrayList<Product> productList =   new ArrayList<>();
+                                            ArrayList<Product> productList = new ArrayList<>();
 
-                                            for (ReturnProductDTO product:product_dtoList){
-                                                productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice()),product.getQty(),product.getStatus(),product.getDescription(),product.getCategory(),product.getImgpath1(),product.getImgpath2(),product.getImgpath3()));
+                                            for (ReturnProductDTO product : product_dtoList) {
+                                                productList.add(new Product(String.valueOf(product.getId()), product.getName(), String.valueOf(product.getPrice()), product.getQty(), product.getStatus(), product.getDescription(), product.getCategory(), product.getImgpath1(), product.getImgpath2(), product.getImgpath3()));
 
                                             }
 
 
-                                            RecyclerView recyclerView = view.findViewById(R.id.productrecyclerView);
+                                            RecyclerView recyclerView = getActivity().findViewById(R.id.productrecyclerView);
 
 
                                             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
 
-                                            ProductAdapter productAdapter = new ProductAdapter(getContext(),productList);
+                                            ProductAdapter productAdapter = new ProductAdapter(getContext(), productList);
                                             recyclerView.setAdapter(productAdapter);
 
 
-                                            ImageButton imageButton = view.findViewById(R.id.advancesearchimageButton);
+                                            ImageButton imageButton = getActivity().findViewById(R.id.advancesearchimageButton);
                                             imageButton.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
@@ -135,118 +414,27 @@ public class HomeFragment extends Fragment {
                                             });
                                         }
                                     });
-                    } else {
+                                } else {
 
 
-                    }
+                                }
 
 
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-
-            }
-        }).start();
-
-        TextInputEditText searchEditText = view.findViewById(R.id.SearchtextInputEditText);
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Gson gson = new Gson();
-
-                        OkHttpClient okHttpClient = new OkHttpClient();
-
-                        // Build URL with query parameters dynamically
-                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
-                                .newBuilder();
-                        urlBuilder.addQueryParameter("searchText", searchEditText.getText().toString());
-
-                        // Convert to URL string
-                        String url = urlBuilder.build().toString();
-
-                        // Create request
-                        Request request = new Request.Builder()
-                                .url(url)
-                                .build();
-
-                        try {
-
-                            Response response = okHttpClient.newCall(request).execute();
-                            String responsetext = response.body().string();
-
-                            Log.i("colors-log", responsetext);
-
-                            ResponseListDTO<ReturnProductDTO> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseListDTO<ReturnProductDTO>>(){}.getType());
-
-                            if (responseDTO.isSuccess()) {
-
-                                List<ReturnProductDTO> product_dtoList = responseDTO.getContent();
-
-
-
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ArrayList<Product> productList =   new ArrayList<>();
-
-                                        for (ReturnProductDTO product:product_dtoList){
-                                            productList.add(new Product(String.valueOf(product.getId()),product.getName(),String.valueOf(product.getPrice()),product.getQty(),product.getStatus(),product.getDescription(),product.getCategory(),product.getImgpath1(),product.getImgpath2(),product.getImgpath3()));
-
-                                        }
-
-
-                                        RecyclerView recyclerView = view.findViewById(R.id.productrecyclerView);
-
-
-                                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2)); // 2 columns
-
-                                        ProductAdapter productAdapter = new ProductAdapter(getContext(),productList);
-                                        recyclerView.setAdapter(productAdapter);
-
-
-                                        ImageButton imageButton = view.findViewById(R.id.advancesearchimageButton);
-                                        imageButton.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                Intent intent = new Intent(getContext(), AdvanceSearchActivity.class);
-                                                startActivity(intent);
-                                            }
-                                        });
-                                    }
-                                });
-                            } else {
-
-
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
                             }
 
 
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
                         }
 
+                    }).start();
+                }
 
-                    }
-
-                }).start();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-
-
-
-        return view;
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
+        }
     }
 
     private void setupImageCarousel() {
@@ -264,6 +452,13 @@ public class HomeFragment extends Fragment {
         carouselItems.add(new CarouselItem(R.drawable.cr5));
 
         carousel.setData(carouselItems);
+    }
+
+    private boolean isNetworkAvailable() {
+        // Implement network check here
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     private  void setCategoryItem(){
