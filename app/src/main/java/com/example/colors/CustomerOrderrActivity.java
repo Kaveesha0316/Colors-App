@@ -2,8 +2,12 @@ package com.example.colors;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,7 +22,9 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,6 +33,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -34,6 +48,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import DTO.CustomerOrderDTO;
@@ -229,6 +244,80 @@ public class CustomerOrderrActivity extends AppCompatActivity {
 
 
     }
+    public void  firebaseInsert(String name,String sts){
+
+
+        HashMap<String,Object> document = new HashMap<>();
+        document.put("name", name);
+        document.put("user",String.valueOf(user.getId()));
+        document.put("status", sts);
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+        firestore.collection("order").add(document)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.i("colors-log", "onSuccess");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i("colors-log", "error");
+                    }
+                });
+
+        firestore.collection("order")
+                .whereEqualTo("user",String.valueOf(user.getId()))
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e("colors-log", "Listen failed.", error);
+                            return;
+                        }
+
+                        if (snapshots != null) {
+                            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+
+                                if (dc.getType().equals(DocumentChange.Type.ADDED)){
+                                    Log.d("colors-log", "notifed ");
+                                    notification();
+                                }
+
+                            }
+                        }
+                    }
+                });
+
+    }
+
+    public void notification() {
+        // Use getActivity() to access the context of the fragment's parent activity
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    "C1",
+                    "Channel 1",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+
+        Notification notification = new NotificationCompat.Builder(CustomerOrderrActivity.this, "C1")
+                .setSmallIcon(R.drawable.bell)
+                .setContentTitle("Product fghfgh")  // Title of the notification
+                .setContentText("Your New Product has been Added successfully")  // Content with Order ID and Total Amount
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)  // Priority
+                .setAutoCancel(true)
+                .setVibrate(new long[]{0, 500, 1000, 500})
+                .build();
+
+        notificationManager.notify(1, notification);
+    }
 
 }
 
@@ -375,6 +464,7 @@ class  CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdapter.Cu
 
                             if (responseDTO.isSuccess()) {
                                 String message = responseDTO.getMessage();
+
                                 if (message.equals("Packed")){
                                     ((Activity) context).runOnUiThread(new Runnable() {
                                         @Override

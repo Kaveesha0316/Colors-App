@@ -127,6 +127,7 @@ public class InvoiceActivityMainActivity extends AppCompatActivity {
         paint.setFakeBoldText(true);
         canvas.drawText("INVOICE", 240, startY, paint);
 
+
         // ** Order Details **
         paint.setTextSize(16);
         paint.setFakeBoldText(false);
@@ -168,6 +169,7 @@ public class InvoiceActivityMainActivity extends AppCompatActivity {
         paint.setTextSize(16);
         paint.setFakeBoldText(true);
         canvas.drawText("Thank you for your purchase!", startX, itemStartY, paint);
+        canvas.drawText("Colors (Pvt)Ltd", startX, itemStartY, paint);
 
         // Finish PDF page
         pdfDocument.finishPage(page);
@@ -179,7 +181,7 @@ public class InvoiceActivityMainActivity extends AppCompatActivity {
             pdfDocument.writeTo(fos);
             fos.close();
             pdfDocument.close();
-            Toast.makeText(this, "Invoice saved: " + invoiceFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "Invoice saved: " + invoiceFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
         }

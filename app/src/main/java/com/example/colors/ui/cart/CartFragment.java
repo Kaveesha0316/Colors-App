@@ -41,6 +41,7 @@ import com.example.colors.ui.profile.DashboardViewModel;
 import com.example.colors.ui.profile.profileFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -129,6 +130,12 @@ SweetAlertDialog progressDialog;
 
         textView21 = view.findViewById(R.id.textView21);
         textView23 = view.findViewById(R.id.textView23);
+
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+
+
 //        RecyclerView recyclerView = view.findViewById(R.id.cartrecyclerView);
 
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -358,7 +365,10 @@ SweetAlertDialog progressDialog;
     }
 
 
-
+    ;
+    Random random = new Random();
+    int randomNum = 100000 + random.nextInt(900000); // Generates a 6-digit random number
+    String orderId = "ORD" + randomNum;
     public void removeperchesproduct(){
         new Thread(() -> {
             OkHttpClient client = new OkHttpClient();
@@ -378,20 +388,9 @@ SweetAlertDialog progressDialog;
 
                 ResponseDTO<String> responseDTO = new Gson().fromJson(response.body().string(), new TypeToken<ResponseDTO<String>>() {}.getType());
                 if (responseDTO.isSuccess()) {
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
-//                                    .setTitleText("Success!")
-//                                    .setContentText("Product was Removed.")
-//                                    .show();
-//                        }
-//                    });
 
                     firebaseInsert();
-                    Random random = new Random();
-                    int randomNum = 100000 + random.nextInt(900000); // Generates a 6-digit random number
-                    String orderId = "ORD" + randomNum;
+
                     Intent intent = new Intent(requireContext(), InvoiceActivityMainActivity.class);
                     intent.putExtra("ORDER_ID", orderId);
                     intent.putExtra("TOTAL_AMOUNT", total);
@@ -410,11 +409,12 @@ SweetAlertDialog progressDialog;
 
 
         HashMap<String,Object> document = new HashMap<>();
-        document.put("message","dfsdf");
-        document.put("name","sdfsdfdsfdfsf");
+        document.put("buyer",String.valueOf(user.getId()));
+        document.put("order",orderId);
+        document.put("total",String.valueOf(total));
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-        firestore.collection("notification").add(document)
+        firestore.collection("buyer").add(document)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -425,6 +425,29 @@ SweetAlertDialog progressDialog;
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.i("colors-log", "error");
+                    }
+                });
+
+        firestore.collection("buyer")
+                .whereEqualTo("buyer",String.valueOf(user.getId()))
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e("colors-log", "Listen failed.", error);
+                            return;
+                        }
+
+                        if (snapshots != null) {
+                            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+
+                                if (dc.getType().equals(DocumentChange.Type.ADDED)){
+                                    Log.d("colors-log", "notifed ");
+                                    notification();
+                                }
+
+                            }
+                        }
                     }
                 });
 
@@ -544,6 +567,34 @@ SweetAlertDialog progressDialog;
             }
         }).start();
     }
+
+    public void notification() {
+        // Use getActivity() to access the context of the fragment's parent activity
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    "C1",
+                    "Channel 1",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
+
+        Notification notification = new NotificationCompat.Builder(getContext(), "C1")
+                .setSmallIcon(R.drawable.bell)
+                .setContentTitle("Order Placed!")  // Title of the notification
+                .setContentText("Your order #" + orderId + " has been placed successfully. Total: RS." + total+"0")  // Content with Order ID and Total Amount
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)  // Priority
+                .setAutoCancel(true)
+                .setVibrate(new long[]{0, 500, 1000, 500})
+                .build();
+
+        notificationManager.notify(1, notification);
+    }
+
+
 }
 
 class CartAdapter extends RecyclerView.Adapter<CartAdapter.cartViewHolder> {
