@@ -17,6 +17,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/carousel_border"
+        android:clipToOutline="true"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/signup_img1" />
 

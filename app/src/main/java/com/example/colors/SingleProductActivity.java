@@ -66,6 +66,7 @@ public class SingleProductActivity extends AppCompatActivity {
 
          TextView productName = findViewById(R.id.sinlge_product_title);
         TextView productPrice = findViewById(R.id.sinlge_product_price);
+        TextView offer = findViewById(R.id.sinlge_product_price2);
         TextView sinlge_product_description = findViewById(R.id.sinlge_product_description);
         TextView textView25 = findViewById(R.id.textView25);
         TextView text_quantity = findViewById(R.id.text_quantity);
@@ -124,7 +125,7 @@ public class SingleProductActivity extends AppCompatActivity {
                       OkHttpClient okHttpClient = new OkHttpClient();
 
                       // Build URL with query parameters dynamically
-                      HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/add")
+                      HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/cart/add")
                               .newBuilder();
                       urlBuilder.addQueryParameter("qty", String.valueOf(qty));
                       urlBuilder.addQueryParameter("product_id", productId);
@@ -198,7 +199,10 @@ public class SingleProductActivity extends AppCompatActivity {
         if (intent != null) {
             productId = intent.getStringExtra("productId");
             productName.setText(intent.getStringExtra("productName"));
-            productPrice.setText("Rs."+intent.getStringExtra("productPrice"));
+            productPrice.setText("Rs."+intent.getStringExtra("productPrice")+"0");
+            Double pp = Double.parseDouble(intent.getStringExtra("productPrice"));
+            Double tt = pp+(pp*10/100);
+            offer.setText("Rs."+tt+"0");
             sinlge_product_description.setText(intent.getStringExtra("description"));
             category = intent.getStringExtra("category");
 
@@ -287,7 +291,7 @@ public class SingleProductActivity extends AppCompatActivity {
                 OkHttpClient okHttpClient = new OkHttpClient();
 
                 // Build URL with query parameters dynamically
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/product/loadrelatedproduct")
+                HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/product/loadrelatedproduct")
                         .newBuilder();
                 urlBuilder.addQueryParameter("category", category);
                 urlBuilder.addQueryParameter("product_id", productId);
@@ -457,7 +461,7 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
                         OkHttpClient okHttpClient = new OkHttpClient();
 
                         // Build URL with query parameters dynamically
-                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/add")
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/cart/add")
                                 .newBuilder();
                         urlBuilder.addQueryParameter("qty", "1");
                         urlBuilder.addQueryParameter("product_id", product.getId());

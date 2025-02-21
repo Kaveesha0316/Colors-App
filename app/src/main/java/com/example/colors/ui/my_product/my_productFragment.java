@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.colors.BuildConfig;
 import com.example.colors.CustomerOrderrActivity;
 import com.example.colors.R;
 import com.example.colors.databinding.FragmentCartBinding;
@@ -122,7 +123,7 @@ public class my_productFragment extends Fragment {
                     OkHttpClient okHttpClient = new OkHttpClient();
 
                     // Build URL with query parameters dynamically
-                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/totalqty")
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/orderdb/totalqty")
                             .newBuilder();
 
                     urlBuilder.addQueryParameter("user_id", String.valueOf(user.getId()));
@@ -179,7 +180,7 @@ public class my_productFragment extends Fragment {
                     OkHttpClient okHttpClient = new OkHttpClient();
 
                     // Build URL with query parameters dynamically
-                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/totalprofit")
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/orderdb/totalprofit")
                             .newBuilder();
 
                     urlBuilder.addQueryParameter("user_id", String.valueOf(user.getId()));
@@ -235,7 +236,7 @@ public class my_productFragment extends Fragment {
                     OkHttpClient okHttpClient = new OkHttpClient();
 
                     // Build URL with query parameters dynamically
-                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/bestproduct")
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/orderdb/bestproduct")
                             .newBuilder();
 
                     urlBuilder.addQueryParameter("user_id", String.valueOf(user.getId()));
@@ -307,7 +308,7 @@ public class my_productFragment extends Fragment {
                         OkHttpClient okHttpClient = new OkHttpClient();
 
                         // Build URL with query parameters dynamically
-                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/barchart")
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/orderdb/barchart")
                                 .newBuilder();
 
                         urlBuilder.addQueryParameter("user_id",String.valueOf(user.getId()));
@@ -435,7 +436,7 @@ public class my_productFragment extends Fragment {
                 OkHttpClient okHttpClient = new OkHttpClient();
 
                 // Build URL with query parameters dynamically
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/orderdb/piechart")
+                HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/orderdb/piechart")
                         .newBuilder();
 
                 urlBuilder.addQueryParameter("user_id",String.valueOf(user.getId()));

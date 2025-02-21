@@ -58,10 +58,6 @@ public class SignUpActivity extends AppCompatActivity {
         Button button1 = findViewById(R.id.button6);
         Button signup_button = findViewById(R.id.signup_button);
         TextView textView1 = findViewById(R.id.textView8);
-        TextView textView2 = findViewById(R.id.textView9);
-        ImageButton imageButton = findViewById(R.id.imageButton7);
-        ImageButton imageButton2 = findViewById(R.id.imageButton8);
-        ImageButton imageButton3 = findViewById(R.id.imageButton9);
         EditText editText1 = findViewById(R.id.edit_text1);
         EditText editText2 = findViewById(R.id.edit_text2);
         EditText editText3 = findViewById(R.id.edit_text3);
@@ -132,7 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
                             RequestBody requestBody = RequestBody.create(gson.toJson(user), MediaType.get("application/json"));
 
                             Request request = new Request.Builder()
-                                    .url("http://192.168.1.2:8080/colors/user/signup")
+                                    .url(BuildConfig.URL+"/user/signup")
                                     .post(requestBody)
                                     .build();
 
@@ -199,10 +195,7 @@ public class SignUpActivity extends AppCompatActivity {
         button1.startAnimation(slideUp);
         signup_button.startAnimation(slideUp);
         textView1.startAnimation(slideUp);
-        textView2.startAnimation(slideUp);
-        imageButton.startAnimation(slideUp);
-        imageButton2.startAnimation(slideUp);
-        imageButton3.startAnimation(slideUp);
+
     }
     public  void warningmsg(TextInputLayout textInputLayout , TextInputEditText editText ,String msg ){
 

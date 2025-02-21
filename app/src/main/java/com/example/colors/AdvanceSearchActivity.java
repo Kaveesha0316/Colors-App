@@ -1,7 +1,9 @@
 package com.example.colors;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -44,8 +46,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import DTO.Product_DTO;
+import DTO.ResponseDTO;
 import DTO.ResponseListDTO;
 import DTO.ReturnProductDTO;
+import DTO.User_DTO;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import model.Product;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -295,7 +300,7 @@ public class AdvanceSearchActivity extends AppCompatActivity implements SensorEv
 
 
                     // Build URL with query parameters dynamically
-                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/advanceSearch")
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/home/advanceSearch")
                             .newBuilder();
 
 //                    String category = urlBuilder.build().queryParameter("category");
@@ -434,9 +439,9 @@ public class AdvanceSearchActivity extends AppCompatActivity implements SensorEv
 
 
 class  SaerchProductAdapter extends RecyclerView.Adapter<SaerchProductAdapter.SaerchProductViewHolder>{
+    public User_DTO user;
 
     class SaerchProductViewHolder extends RecyclerView.ViewHolder{
-
         //        public ImageView imageView;
         public TextView textView1;
         public TextView textView2;
@@ -492,11 +497,107 @@ class  SaerchProductAdapter extends RecyclerView.Adapter<SaerchProductAdapter.Sa
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(context, SingleProductActivity.class);
                 intent.putExtra("productId", product.getId());
                 intent.putExtra("productName", product.getName());
                 intent.putExtra("productPrice", product.getPrice());
+                intent.putExtra("qty", String.valueOf(product.getQty()));
+                intent.putExtra("description", product.getDescription());
+                intent.putExtra("category", product.getCategory());
+                intent.putExtra("imgpath1", product.getImgpath1());
+                intent.putExtra("imgpath2", product.getImgpath2());
+                intent.putExtra("imgpath3", product.getImgpath3());
                 context.startActivity(intent);
+            }
+        });
+        if (product.getQty() == 0){
+            holder.Button1.setEnabled(false);
+            holder.Button1.setText("Out of stock");
+            holder.Button1.setBackgroundColor(context.getColor(R.color.terracotta));
+        }
+        holder.Button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences sharedPreferences = context.getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
+                String userjson = sharedPreferences.getString("userData",null);
+
+                if (userjson != null) {
+                    Gson gson = new Gson();
+
+                    user = gson.fromJson(userjson, User_DTO.class);
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Gson gson = new Gson();
+
+                        OkHttpClient okHttpClient = new OkHttpClient();
+
+                        // Build URL with query parameters dynamically
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/cart/add")
+                                .newBuilder();
+                        urlBuilder.addQueryParameter("qty", "1");
+                        urlBuilder.addQueryParameter("product_id", product.getId());
+
+                        urlBuilder.addQueryParameter("user_id",String.valueOf(user.getId()));
+
+                        // Convert to URL string
+                        String url = urlBuilder.build().toString();
+
+                        // Create request
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .build();
+
+
+                        try {
+
+                            Response response = okHttpClient.newCall(request).execute();
+                            String responsetext = response.body().string();
+
+                            Log.i("colors-log", responsetext);
+
+                            ResponseDTO<String> responseDTO =  gson.fromJson(responsetext, new TypeToken<ResponseDTO<String>>(){}.getType());
+
+                            if (responseDTO.isSuccess()) {
+                                String message = responseDTO.getMessage();
+                                if (message.equals("add")){
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                                    .setTitleText("Success!")
+                                                    .setContentText("Product added to your cart.")
+                                                    .show();
+                                        }
+                                    });
+                                }else {
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                                    .setTitleText("Success!")
+                                                    .setContentText("Product quantity updated.")
+                                                    .show();
+                                        }
+                                    });
+                                }
+                            } else {
+
+
+                            }
+
+
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+                }).start();
+
             }
         });
     }

@@ -55,11 +55,7 @@ public class SignInActivity extends AppCompatActivity {
         ImageView imageView2 = findViewById(R.id.imageView2);
         Button button1 =  findViewById(R.id.signin_button);
         Button button2 =  findViewById(R.id.button4);
-        ImageButton imageButton1 = findViewById(R.id.imageButton3);
-        ImageButton imageButton2 = findViewById(R.id.imageButton4);
-        ImageButton imageButton3 = findViewById(R.id.imageButton5);
         TextView textView1 = findViewById(R.id.textView5);
-        TextView textView2 = findViewById(R.id.textView6);
         EditText editText1 = findViewById(R.id.edit_text1);
         EditText editText2 = findViewById(R.id.edit_text2);
 
@@ -69,12 +65,8 @@ public class SignInActivity extends AppCompatActivity {
 
         imageView2.startAnimation(fadeIn);
         button1.startAnimation(slideUp);
-        imageButton1.startAnimation(slideUp);
-        imageButton2.startAnimation(slideUp);
-        imageButton3.startAnimation(slideUp);
         button2.startAnimation(slideUp);
         textView1.startAnimation(slideUp);
-        textView2.startAnimation(slideUp);
 
 
         button1.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +105,7 @@ public class SignInActivity extends AppCompatActivity {
                             RequestBody requestBody = RequestBody.create(gson.toJson(user), MediaType.get("application/json"));
 
                             Request request = new Request.Builder()
-                                    .url("http://192.168.1.2:8080/colors/user/signin")
+                                    .url(BuildConfig.URL+"/user/signin")
                                     .post(requestBody)
                                     .build();
 

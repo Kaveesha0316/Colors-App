@@ -87,7 +87,7 @@ public class myProductActivity extends AppCompatActivity {
                 OkHttpClient okHttpClient = new OkHttpClient();
 
 
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/product/loadmyproduct")
+                HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/product/loadmyproduct")
                         .newBuilder();
                 urlBuilder.addQueryParameter("searchText","");
                 urlBuilder.addQueryParameter("userId",String.valueOf(user.getId()));
@@ -121,7 +121,7 @@ public class myProductActivity extends AppCompatActivity {
 
                                 for (MyProductDTO myproduct:Myproduct_dtoList){
 
-                                    productList.add(new MyProduct(String.valueOf(myproduct.getId()),myproduct.getName(),"Rs."+String.valueOf(myproduct.getPrice()),String.valueOf(myproduct.getAvqty()),String.valueOf(myproduct.getSelqty()),String.valueOf(myproduct.getProfit()),myproduct.getImgpath(),myproduct.getStatus(),myproduct.getImgpath2(),myproduct.getImgpath3(),myproduct.getDescription(),myproduct.getCategory()));
+                                    productList.add(new MyProduct(String.valueOf(myproduct.getId()),myproduct.getName(),"Rs."+String.valueOf(myproduct.getPrice())+"0",String.valueOf(myproduct.getAvqty()),String.valueOf(myproduct.getSelqty()),String.valueOf(myproduct.getProfit()),myproduct.getImgpath(),myproduct.getStatus(),myproduct.getImgpath2(),myproduct.getImgpath3(),myproduct.getDescription(),myproduct.getCategory()));
 
                                 }
 
@@ -166,7 +166,7 @@ public class myProductActivity extends AppCompatActivity {
 
                         OkHttpClient okHttpClient = new OkHttpClient();
 
-                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/product/loadmyproduct")
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/product/loadmyproduct")
                                 .newBuilder();
                         urlBuilder.addQueryParameter("searchText", editText.getText().toString());
                         urlBuilder.addQueryParameter("userId",String.valueOf(user.getId()));
@@ -347,7 +347,7 @@ class  MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.MyProductV
                             OkHttpClient okHttpClient = new OkHttpClient();
 
                             // Build URL with query parameters dynamically
-                            HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/product/changestatus")
+                            HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/product/changestatus")
                                     .newBuilder();
                             urlBuilder.addQueryParameter("status", "1");
                             urlBuilder.addQueryParameter("product_id", product.getId());
@@ -402,7 +402,7 @@ class  MyProductAdapter extends RecyclerView.Adapter<MyProductAdapter.MyProductV
                             OkHttpClient okHttpClient = new OkHttpClient();
 
                             // Build URL with query parameters dynamically
-                            HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/product/changestatus")
+                            HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/product/changestatus")
                                     .newBuilder();
                             urlBuilder.addQueryParameter("status", "2");
                             urlBuilder.addQueryParameter("product_id", product.getId());

@@ -467,7 +467,7 @@ public class AddProductActivity extends AppCompatActivity {
                                                     RequestBody requestBody = RequestBody.create(gson.toJson(product), MediaType.get("application/json"));
 
                                                     Request request = new Request.Builder()
-                                                            .url("http://192.168.1.4:8080/colors/product/add")
+                                                            .url(BuildConfig.URL+"/product/add")
                                                             .post(requestBody)
                                                             .build();
 
@@ -564,7 +564,7 @@ public class AddProductActivity extends AppCompatActivity {
                                                     RequestBody requestBody = RequestBody.create(gson.toJson(product), MediaType.get("application/json"));
 
                                                     Request request = new Request.Builder()
-                                                            .url("http://192.168.1.4:8080/colors/product/add")
+                                                            .url(BuildConfig.URL+"/product/add")
                                                             .post(requestBody)
                                                             .build();
 
@@ -659,7 +659,7 @@ public class AddProductActivity extends AppCompatActivity {
                                                     RequestBody requestBody = RequestBody.create(gson.toJson(product), MediaType.get("application/json"));
 
                                                     Request request = new Request.Builder()
-                                                            .url("http://192.168.1.4:8080/colors/product/add")
+                                                            .url(BuildConfig.URL+"product/add")
                                                             .post(requestBody)
                                                             .build();
 

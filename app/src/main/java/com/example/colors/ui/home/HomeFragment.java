@@ -31,6 +31,7 @@ import com.aemerse.slider.ImageCarousel;
 import com.aemerse.slider.model.CarouselItem;
 import com.bumptech.glide.Glide;
 import com.example.colors.AdvanceSearchActivity;
+import com.example.colors.BuildConfig;
 import com.example.colors.R;
 import com.example.colors.SingleProductActivity;
 import com.example.colors.databinding.FragmentHomeBinding;
@@ -270,7 +271,7 @@ public class HomeFragment extends Fragment {
                     OkHttpClient okHttpClient = new OkHttpClient();
 
                     // Build URL with query parameters dynamically
-                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/home/loadproduct")
                             .newBuilder();
                     urlBuilder.addQueryParameter("searchText", "");
 
@@ -357,7 +358,7 @@ public class HomeFragment extends Fragment {
                             OkHttpClient okHttpClient = new OkHttpClient();
 
                             // Build URL with query parameters dynamically
-                            HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/home/loadproduct")
+                            HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/home/loadproduct")
                                     .newBuilder();
                             urlBuilder.addQueryParameter("searchText", searchEditText.getText().toString());
 
@@ -592,7 +593,7 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
                         OkHttpClient okHttpClient = new OkHttpClient();
 
                         // Build URL with query parameters dynamically
-                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/add")
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/cart/add")
                                 .newBuilder();
                         urlBuilder.addQueryParameter("qty", "1");
                         urlBuilder.addQueryParameter("product_id", product.getId());

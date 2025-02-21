@@ -28,7 +28,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.colors.BuildConfig;
 import com.example.colors.ContactActivity;
+import com.example.colors.MainActivity;
 import com.example.colors.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -97,7 +99,7 @@ public class profileFragment extends Fragment {
             Glide.with(this)
                     .load(imageUrl)
                     .placeholder(R.drawable.art) // Optional: Placeholder image
-                    .error(R.drawable.placeholder) // Optional: Error image
+                    .error(R.drawable.user) // Optional: Error image
                     .into(imageView);
 
             textView6.setText(user.getEmail());
@@ -144,7 +146,15 @@ public class profileFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadImageToFirebase(UserImageUri);
+                SharedPreferences.Editor editor = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE).edit();
+                editor.clear(); // Clear all stored preferences
+                editor.apply();
+
+                // Redirect to login activity
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
 
             }
         });
@@ -281,7 +291,7 @@ public class profileFragment extends Fragment {
                                         RequestBody requestBody = RequestBody.create(gson.toJson(user), MediaType.get("application/json"));
 
                                         Request request = new Request.Builder()
-                                                .url("http://192.168.1.4:8080/colors/user/profileUpdate")
+                                                .url(BuildConfig.URL+"/user/profileUpdate")
                                                 .post(requestBody)
                                                 .build();
 

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.colors.AdvanceSearchActivity;
+import com.example.colors.BuildConfig;
 import com.example.colors.R;
 import com.example.colors.SqlLite.DatabaseHelper;
 import com.google.gson.Gson;
@@ -165,7 +166,7 @@ public class OrdersFragment extends Fragment {
                 OkHttpClient okHttpClient = new OkHttpClient();
 
                 // Build URL with query parameters dynamically
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/order/load")
+                HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/order/load")
                         .newBuilder();
                 urlBuilder.addQueryParameter("userId", String.valueOf(user.getId()));
 

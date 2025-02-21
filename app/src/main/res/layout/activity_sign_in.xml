@@ -122,55 +122,5 @@
         app:layout_constraintTop_toTopOf="@+id/textView5"
         app:layout_constraintVertical_bias="0.473" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/lato_regular"
-        android:text="@string/welcome_t6"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/cream"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:layout_constraintVertical_bias="0.037"
-        app:srcCompat="@drawable/facebook" />
-
-    <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/cream"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton5"
-        app:layout_constraintHorizontal_bias="0.481"
-        app:layout_constraintStart_toEndOf="@+id/imageButton3"
-        app:layout_constraintTop_toTopOf="@+id/textView6"
-        app:layout_constraintVertical_bias="0.358"
-        app:srcCompat="@drawable/google" />
-
-    <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="108dp"
-        android:backgroundTint="@color/cream"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4"
-        app:layout_constraintVertical_bias="0.428"
-        app:srcCompat="@drawable/twitter" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

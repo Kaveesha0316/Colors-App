@@ -170,54 +170,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signup_button" />
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/welcome_t6"
-            android:textColor="@color/dark_brown"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-        <ImageButton
-            android:id="@+id/imageButton7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:backgroundTint="@color/cream"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButton8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8"
-            app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/facebook" />
-
-        <ImageButton
-            android:id="@+id/imageButton8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:backgroundTint="@color/cream"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton9"
-            app:layout_constraintHorizontal_bias="0.538"
-            app:layout_constraintStart_toEndOf="@+id/imageButton7"
-            app:layout_constraintTop_toBottomOf="@+id/textView9"
-            app:layout_constraintVertical_bias="0.687"
-            app:srcCompat="@drawable/google" />
-
-        <ImageButton
-            android:id="@+id/imageButton9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="104dp"
-            android:backgroundTint="@color/cream"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButton8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView9"
-            app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/twitter" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

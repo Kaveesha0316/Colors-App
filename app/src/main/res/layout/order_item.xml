@@ -17,6 +17,8 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/carousel_border"
+        android:clipToOutline="true"
         app:srcCompat="@drawable/signup_img1" />
 
     <TextView

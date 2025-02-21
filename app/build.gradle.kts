@@ -14,7 +14,9 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String","URL","\"http://192.168.1.5:8080/colors\"")
     }
 
     buildTypes {
@@ -32,6 +34,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

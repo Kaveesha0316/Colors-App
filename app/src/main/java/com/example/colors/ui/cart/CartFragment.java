@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.colors.AddProductActivity;
+import com.example.colors.BuildConfig;
 import com.example.colors.InvoiceActivityMainActivity;
 import com.example.colors.R;
 import com.example.colors.databinding.FragmentCartBinding;
@@ -298,7 +299,7 @@ SweetAlertDialog progressDialog;
             @Override
             public void onClick(View view) {
 
-                if (user.getAddress().equals("")&&user.getCity().equals("")){
+                if (user.getAddress() == null &&user.getCity() == null){
                     new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("Warning!")
                             .setContentText("Please update yor address and city")
@@ -320,7 +321,7 @@ SweetAlertDialog progressDialog;
                 }else{
                     new Thread(() -> {
                         OkHttpClient client = new OkHttpClient();
-                        HttpUrl url = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/loadcart")
+                        HttpUrl url = HttpUrl.parse(BuildConfig.URL+"/cart/loadcart")
                                 .newBuilder()
                                 .addQueryParameter("userId", String.valueOf(user.getId()))
                                 .build();
@@ -373,7 +374,7 @@ SweetAlertDialog progressDialog;
         new Thread(() -> {
             OkHttpClient client = new OkHttpClient();
 
-            HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/removeperchesproduct")
+            HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/cart/removeperchesproduct")
                     .newBuilder();
 
             urlBuilder.addQueryParameter("userId", String.valueOf(user.getId()));
@@ -497,7 +498,7 @@ SweetAlertDialog progressDialog;
     private void loadCart() {
         new Thread(() -> {
             OkHttpClient client = new OkHttpClient();
-            HttpUrl url = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/loadcart")
+            HttpUrl url = HttpUrl.parse(BuildConfig.URL+"/cart/loadcart")
                     .newBuilder()
                     .addQueryParameter("userId", String.valueOf(user.getId()))
                     .build();
@@ -537,7 +538,7 @@ SweetAlertDialog progressDialog;
         new Thread(() -> {
             OkHttpClient client = new OkHttpClient();
 
-            HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/delete")
+            HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/cart/delete")
                     .newBuilder();
 
             urlBuilder.addQueryParameter("cartItemId", String.valueOf(itemId));
@@ -658,7 +659,7 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.cartViewHolder> {
                     OkHttpClient okHttpClient = new OkHttpClient();
 
                     // Build URL with query parameters dynamically
-                    HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/update")
+                    HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/cart/update")
                             .newBuilder();
                     urlBuilder.addQueryParameter("qty", "1");
                     urlBuilder.addQueryParameter("product_id", String.valueOf(item.getProduct_Id()));
@@ -746,7 +747,7 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.cartViewHolder> {
                         OkHttpClient okHttpClient = new OkHttpClient();
 
                         // Build URL with query parameters dynamically
-                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/cart/update")
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/cart/update")
                                 .newBuilder();
                         urlBuilder.addQueryParameter("qty", "1");
                         urlBuilder.addQueryParameter("product_id", String.valueOf(item.getProduct_Id()));

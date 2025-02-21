@@ -35,6 +35,7 @@
         android:layout_height="350dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/singel_product_image"
+        android:clipToOutline="true"
         android:scaleType="centerCrop"
         android:src="@drawable/signin_img3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +61,7 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/singel_product_image"
             android:clickable="true"
+            android:clipToOutline="true"
             android:focusable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/sign_img1" />
@@ -71,6 +73,7 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/singel_product_image"
             android:clickable="true"
+            android:clipToOutline="true"
             android:focusable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/signup_img1" />
@@ -81,6 +84,7 @@
             android:layout_height="60dp"
             android:background="@drawable/singel_product_image"
             android:clickable="true"
+            android:clipToOutline="true"
             android:focusable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/signup_img3" />

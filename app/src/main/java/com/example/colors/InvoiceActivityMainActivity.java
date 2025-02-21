@@ -169,7 +169,7 @@ public class InvoiceActivityMainActivity extends AppCompatActivity {
         paint.setTextSize(16);
         paint.setFakeBoldText(true);
         canvas.drawText("Thank you for your purchase!", startX, itemStartY, paint);
-        canvas.drawText("Colors (Pvt)Ltd", startX, itemStartY, paint);
+
 
         // Finish PDF page
         pdfDocument.finishPage(page);

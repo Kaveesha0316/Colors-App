@@ -92,7 +92,7 @@ public class CustomerOrderrActivity extends AppCompatActivity {
                 OkHttpClient okHttpClient = new OkHttpClient();
 
                 // Build URL with query parameters dynamically
-                HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/order/loadcus")
+                HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/order/loadcus")
                         .newBuilder();
                 urlBuilder.addQueryParameter("userId", String.valueOf(user.getId()));
                 urlBuilder.addQueryParameter("searchText", "");
@@ -172,7 +172,7 @@ public class CustomerOrderrActivity extends AppCompatActivity {
                         OkHttpClient okHttpClient = new OkHttpClient();
 
                         // Build URL with query parameters dynamically
-                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/order/loadcus")
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/order/loadcus")
                                 .newBuilder();
                         urlBuilder.addQueryParameter("userId", String.valueOf(user.getId()));
                         urlBuilder.addQueryParameter("searchText", editText2.getText().toString());
@@ -437,7 +437,7 @@ class  CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdapter.Cu
                         String orderId = customerOrderArrayList.get(currentPosition).getId();
                         String status = (String) holder.button.getText();
                         // Build URL with query parameters dynamically
-                        HttpUrl.Builder urlBuilder = HttpUrl.parse("http://192.168.1.4:8080/colors/order/changests")
+                        HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.URL+"/order/changests")
                                 .newBuilder();
                         urlBuilder.addQueryParameter("orderId",orderId);
                         urlBuilder.addQueryParameter("status",status);
