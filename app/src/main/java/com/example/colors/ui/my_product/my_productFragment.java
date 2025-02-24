@@ -284,6 +284,11 @@ public class my_productFragment extends Fragment {
                 }
             }).start();
 
+        }else {
+            new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Warning!")
+                    .setContentText("Please check your internet connection")
+                    .show();
         }
 
         return view;

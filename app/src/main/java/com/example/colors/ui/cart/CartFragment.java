@@ -299,67 +299,79 @@ SweetAlertDialog progressDialog;
             @Override
             public void onClick(View view) {
 
-                if (user.getAddress() == null &&user.getCity() == null){
-                    new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
-                            .setTitleText("Warning!")
-                            .setContentText("Please update yor address and city")
-                            .show();
-                    profileFragment fragmentB = new profileFragment();
+               Log.i("asdadsad",textView23.getText().toString());
+
+               if (textView23.getText().toString().equals("Rs.0.00")){
+                                                           new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                                                .setTitleText("Warning!")
+                                                .setContentText("Cart is Empty.")
+                                                .show();
+               }else {
 
 
-                    FragmentManager fragmentManager = getParentFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                   if (user.getAddress() == null && user.getCity() == null) {
+                       new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                               .setTitleText("Warning!")
+                               .setContentText("Please update yor address and city")
+                               .show();
+                       profileFragment fragmentB = new profileFragment();
 
 
-                    fragmentTransaction.replace(R.id.fragment_container, fragmentB);
+                       FragmentManager fragmentManager = getParentFragmentManager();
+                       FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 
-                    fragmentTransaction.addToBackStack(null);
+                       fragmentTransaction.replace(R.id.fragment_container, fragmentB);
 
 
-                    fragmentTransaction.commit();
-                }else{
-                    new Thread(() -> {
-                        OkHttpClient client = new OkHttpClient();
-                        HttpUrl url = HttpUrl.parse(BuildConfig.URL+"/cart/loadcart")
-                                .newBuilder()
-                                .addQueryParameter("userId", String.valueOf(user.getId()))
-                                .build();
-                        Request request = new Request.Builder().url(url.toString()).build();
-                        try {
-                            Response response = client.newCall(request).execute();
+                       fragmentTransaction.addToBackStack(null);
 
-                            ResponseListDTO<Cart_DTO> responseDTO = new Gson().fromJson(response.body().string(), new TypeToken<ResponseListDTO<Cart_DTO>>() {}.getType());
-                            if (responseDTO.isSuccess()) {
-                                List<Cart_DTO> cartDtoList = responseDTO.getContent();
-                                StringBuilder name = new StringBuilder();
 
-                                for (Cart_DTO cartDto : cartDtoList) {
-                                    name.append(cartDto.getProduct_name())
-                                            .append(" x ")
-                                            .append(cartDto.getQty())
-                                            .append(", ");
-                                }
+                       fragmentTransaction.commit();
+                   } else {
+                       new Thread(() -> {
+                           OkHttpClient client = new OkHttpClient();
+                           HttpUrl url = HttpUrl.parse(BuildConfig.URL + "/cart/loadcart")
+                                   .newBuilder()
+                                   .addQueryParameter("userId", String.valueOf(user.getId()))
+                                   .build();
+                           Request request = new Request.Builder().url(url.toString()).build();
+                           try {
+                               Response response = client.newCall(request).execute();
+
+                               ResponseListDTO<Cart_DTO> responseDTO = new Gson().fromJson(response.body().string(), new TypeToken<ResponseListDTO<Cart_DTO>>() {
+                               }.getType());
+                               if (responseDTO.isSuccess()) {
+                                   List<Cart_DTO> cartDtoList = responseDTO.getContent();
+                                   StringBuilder name = new StringBuilder();
+
+                                   for (Cart_DTO cartDto : cartDtoList) {
+                                       name.append(cartDto.getProduct_name())
+                                               .append(" x ")
+                                               .append(cartDto.getQty())
+                                               .append(", ");
+                                   }
 
 // Remove trailing comma and space if not empty
-                                if (name.length() > 0) {
-                                    name.setLength(name.length() - 2);
-                                }
+                                   if (name.length() > 0) {
+                                       name.setLength(name.length() - 2);
+                                   }
 
-                                String result = name.toString();
-                                Log.i("colors-log",result);
-                                getActivity().runOnUiThread(() -> {
-                                    initiatePayment(result);
+                                   String result = name.toString();
+                                   Log.i("colors-log", result);
+                                   getActivity().runOnUiThread(() -> {
+                                       initiatePayment(result);
 
 
-                                });
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }).start();
+                                   });
+                               }
+                           } catch (Exception e) {
+                               e.printStackTrace();
+                           }
+                       }).start();
 
-                }
+                   }
+               }
 
             }
         });
@@ -528,8 +540,8 @@ SweetAlertDialog progressDialog;
         for (Cart cart : cartArrayList) {
             subTotal += cart.getProduct_price() * Integer.parseInt(cart.getQty());
         }
-        textView21.setText("Rs." + subTotal);
-        textView23.setText("Rs." + subTotal);
+        textView21.setText("Rs." + subTotal+"0");
+        textView23.setText("Rs." + subTotal+"0");
         total = subTotal;
     }
 
@@ -637,7 +649,7 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.cartViewHolder> {
     public void onBindViewHolder(@NonNull cartViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Cart item = cartlist.get(position);
         holder.textView1.setText(item.getProduct_name());
-        holder.textView2.setText("Rs." + item.getProduct_price());
+        holder.textView2.setText("Rs." + item.getProduct_price()+"0");
         holder.textView3.setText(item.getQty());
         Glide.with(context).load(item.getProduct_imagepath()).into(holder.imageView);
 

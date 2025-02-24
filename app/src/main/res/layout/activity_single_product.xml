@@ -97,11 +97,10 @@
     <!-- Product Description -->
 
 
-
     <TextView
         android:id="@+id/sinlge_product_description"
-        android:layout_width="320dp"
-        android:layout_height="78dp"
+        android:layout_width="343dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/lato_regular"

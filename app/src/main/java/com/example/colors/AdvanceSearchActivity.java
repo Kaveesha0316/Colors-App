@@ -485,7 +485,7 @@ class  SaerchProductAdapter extends RecyclerView.Adapter<SaerchProductAdapter.Sa
         Product product = productArrayList.get(position);
 
         holder.textView1.setText(productArrayList.get(position).getName());
-        holder.textView2.setText(productArrayList.get(position).getPrice());
+        holder.textView2.setText("Rs."+productArrayList.get(position).getPrice()+"0");
 //        holder.imageView.setText(productArrayList.get(position).getId());
 
         Glide.with(context)

@@ -435,6 +435,11 @@ public class HomeFragment extends Fragment {
                 public void afterTextChanged(Editable editable) {
                 }
             });
+        }else {
+            new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Warning!")
+                    .setContentText("Please check your internet connection")
+                    .show();
         }
     }
 
@@ -465,11 +470,11 @@ public class HomeFragment extends Fragment {
     private  void setCategoryItem(){
         LinearLayout horizontalLayout = binding.horizontalLayout;
 
-// Example data
+
         String[] itemTitles = {"Pottery", "Wooden", "Art","Jewelry","Decors", "Seasonal"};
         int[] itemImages = {R.drawable.pot2, R.drawable.wood, R.drawable.art,R.drawable.jualary,R.drawable.decor,R.drawable.seasonal};
 
-// Add items to the HorizontalScrollView
+
         for (int i = 0; i < itemTitles.length; i++) {
             // Inflate the item layout
             View itemView = getLayoutInflater().inflate(R.layout.category_item, horizontalLayout, false);
@@ -485,7 +490,6 @@ public class HomeFragment extends Fragment {
             horizontalLayout.addView(itemView);
         }
     }
-
 
     @Override
     public void onDestroyView() {
@@ -542,7 +546,7 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
         Product product = productArrayList.get(position);
 
         holder.textView1.setText(productArrayList.get(position).getName());
-        holder.textView2.setText( "Rs."+productArrayList.get(position).getPrice());
+        holder.textView2.setText( "Rs."+productArrayList.get(position).getPrice()+"0");
 
 
         Glide.with(context)

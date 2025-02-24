@@ -24,6 +24,7 @@
     <string name="adsearch_t2">Min:</string>
     <string name="adsearch_t3">Max:</string>
     <string name="myproduct_t1">My Products</string>
+    <string name="myproduct_t111">My Products Dashboard</string>
     <string name="myproduct_t2">Orders</string>
     <string name="myproduct_t3">Products</string>
     <string name="myproduct_t4">Profit percentage %</string>

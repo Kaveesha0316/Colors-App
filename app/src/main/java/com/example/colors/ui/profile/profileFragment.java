@@ -98,7 +98,7 @@ public class profileFragment extends Fragment {
 
             Glide.with(this)
                     .load(imageUrl)
-                    .placeholder(R.drawable.art) // Optional: Placeholder image
+                    .placeholder(R.drawable.loading) // Optional: Placeholder image
                     .error(R.drawable.user) // Optional: Error image
                     .into(imageView);
 

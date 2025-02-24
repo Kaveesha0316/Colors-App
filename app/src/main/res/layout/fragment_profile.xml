@@ -35,6 +35,8 @@
                 android:layout_height="97dp"
                 android:layout_marginTop="32dp"
                 android:src="@drawable/boy"
+                android:background="@drawable/image_border"
+                android:clipToOutline="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"

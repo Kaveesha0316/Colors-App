@@ -307,7 +307,7 @@ Context context;
         holder.button1.setText(orderArrayList.get(position).getStatus());
 
         if (orderArrayList.get(position).getStatus().equals("Processing")){
-            holder.button1.setBackgroundColor(context.getColor(R.color.red));
+            holder.button1.setBackgroundColor(context.getColor(R.color.dark_brown));
         }else if (orderArrayList.get(position).getStatus().equals("Packed")){
             holder.button1.setBackgroundColor(context.getColor(R.color.olive_green));
         }else if (orderArrayList.get(position).getStatus().equals("Dispatch")){
