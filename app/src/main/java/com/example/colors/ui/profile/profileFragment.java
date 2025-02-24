@@ -182,70 +182,7 @@ public class profileFragment extends Fragment {
                 }else {
 
                     uploadImageToFirebase(UserImageUri);
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            Gson gson = new Gson();
-//                            JsonObject user = new JsonObject();
-//                            user.addProperty("id", id);
-//                            user.addProperty("name", editText1.getText().toString());
-//                            user.addProperty("password", editText2.getText().toString());
-//                            user.addProperty("mobile", editText3.getText().toString());
-//                            user.addProperty("address", editText4.getText().toString());
-//                            user.addProperty("city", editText5.getText().toString());
-//
-//
-//                            OkHttpClient okHttpClient = new OkHttpClient();
-//
-//                            RequestBody requestBody = RequestBody.create(gson.toJson(user), MediaType.get("application/json"));
-//
-//                            Request request = new Request.Builder()
-//                                    .url("http://192.168.1.2:8080/colors/user/profileUpdate")
-//                                    .post(requestBody)
-//                                    .build();
-//
-//                            try {
-//
-//                                Response response = okHttpClient.newCall(request).execute();
-//                                String responsetext = response.body().string();
-//
-//                                ResponseDTO<User_DTO> responseDTO = gson.fromJson(responsetext, new TypeToken<ResponseDTO<User_DTO>>(){}.getType());
-//
-//
-//
-//
-//                                if (responseDTO.isSuccess()) {
-//
-//                                    User_DTO userDTO = responseDTO.getContent();
-//
-////                                    Log.i("colors-log", "User Name: " + userDTO.getName());
-//                                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
-//                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                                    String userjson = gson.toJson(userDTO);
-//                                    editor.putString("userData",userjson);
-//                                    editor.apply();
-//
-//                                    getActivity().runOnUiThread(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            showSuccessDialog(context, "Success");
-//                                        }
-//                                    });
-//
-//
-//
-//                                } else {
-//                                    showErrorDialog(getContext(), "something went wrong");
-//
-//                                }
-//
-//
-//                            } catch (Exception e) {
-//                                throw new RuntimeException(e);
-//                            }
-//                        }
-//                    }).start();
+
                 }
 
 

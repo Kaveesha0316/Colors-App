@@ -454,8 +454,8 @@ public class HomeFragment extends Fragment {
 
         List<CarouselItem> carouselItems = new ArrayList<>();
         carouselItems.add(new CarouselItem(R.drawable.cr1));
-        carouselItems.add(new CarouselItem(R.drawable.cr6));
         carouselItems.add(new CarouselItem(R.drawable.cr5));
+        carouselItems.add(new CarouselItem(R.drawable.cr6));
 
         carousel.setData(carouselItems);
     }
@@ -551,8 +551,8 @@ class  ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHol
 
         Glide.with(context)
                 .load(productArrayList.get(position).getImgpath1())
-                .placeholder(R.drawable.loading) // Optional: Placeholder image
-                .error(R.drawable.mark) // Optional: Error image
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.mark)
                 .into(holder.productImage);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {

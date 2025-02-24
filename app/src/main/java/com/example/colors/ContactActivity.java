@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -41,6 +42,14 @@ public class ContactActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        TextView textView = findViewById(R.id.textView62);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ContactActivity.this,WebsiteactivityActivity.class));
+            }
         });
 
         SupportMapFragment supportMapFragment = new SupportMapFragment();
@@ -126,18 +135,11 @@ public class ContactActivity extends AppCompatActivity {
         }
     }
     private void sendMessage(String phoneNumber, String message) {
-//        try {
-//            // For WhatsApp: Use WhatsApp URI format
-//            Uri uri = Uri.parse("https://wa.me/" + phoneNumber + "?text=" + Uri.encode(message));
-//            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//            startActivity(intent);
-//        } catch (Exception e) {
-            // Fallback to SMS if WhatsApp is not available
+
             Uri smsUri = Uri.parse("smsto:" + phoneNumber);
             Intent smsIntent = new Intent(Intent.ACTION_SENDTO, smsUri);
             smsIntent.putExtra("sms_body", message);
             startActivity(smsIntent);
-//        }
     }
 
     // Method to dial a phone number

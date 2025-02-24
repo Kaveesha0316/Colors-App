@@ -7,10 +7,15 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-feature android:name="android.hardware.sensor.proximity" android:required="true"/>
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.proximity"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -23,14 +28,16 @@
         android:theme="@style/Theme.Colors"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".WebsiteactivityActivity"
+            android:exported="false" />
         <!-- FileProvider for Secure File Access -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.colors.provider"
             android:exported="false"
-            android:requestLegacyExternalStorage="true"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            android:requestLegacyExternalStorage="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
@@ -77,6 +84,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -84,7 +92,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBjFywMOiZQbx9FtdMoH0fDNqYgBu6EaRw" />
-
     </application>
 
 </manifest>
