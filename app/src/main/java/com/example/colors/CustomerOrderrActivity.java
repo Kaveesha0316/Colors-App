@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -126,9 +128,7 @@ public class CustomerOrderrActivity extends AppCompatActivity {
                                 ArrayList<CustomerOrder> customerOrderArrayList = new ArrayList<>();
 
                                 for (CustomerOrderDTO product:product_dtoList){
-                                    customerOrderArrayList.add(new CustomerOrder(String.valueOf(product.getOrderId()),product.getName(),product.getQty(),product.getPrice(),product.getDate(),product.getCname(),product.getCmobile(),product.getCcity(),product.getCaddress(),product.getStatus(),product.getImageUrl()));
-
-
+                                    customerOrderArrayList.add(new CustomerOrder(String.valueOf(product.getOrderId()),product.getName(),product.getQty(),product.getPrice(),product.getDate(),product.getCname(),product.getCmobile(),product.getCcity(),product.getCaddress(),product.getStatus(),product.getImageUrl(),product.getClocation()));
 
                                 }
 
@@ -206,7 +206,7 @@ public class CustomerOrderrActivity extends AppCompatActivity {
                                         ArrayList<CustomerOrder> customerOrderArrayList = new ArrayList<>();
 
                                         for (CustomerOrderDTO product:product_dtoList){
-                                            customerOrderArrayList.add(new CustomerOrder(String.valueOf(product.getOrderId()),product.getName(),product.getQty(),product.getPrice(),product.getDate(),product.getCname(),product.getCmobile(),product.getCcity(),product.getCaddress(),product.getStatus(),product.getImageUrl()));
+                                            customerOrderArrayList.add(new CustomerOrder(String.valueOf(product.getOrderId()),product.getName(),product.getQty(),product.getPrice(),product.getDate(),product.getCname(),product.getCmobile(),product.getCcity(),product.getCaddress(),product.getStatus(),product.getImageUrl(),product.getClocation()));
 
 
 
@@ -336,6 +336,8 @@ class  CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdapter.Cu
         TextView textView7;
         TextView textView8;
 
+        ImageButton location;
+
         ImageView imageView;
         Button button;
         public CustomerOrderViewHolder(@NonNull View itemView) {
@@ -349,6 +351,7 @@ class  CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdapter.Cu
             textView7 = itemView.findViewById(R.id.textView51);
             textView8 = itemView.findViewById(R.id.textView53);
             imageView = itemView.findViewById(R.id.imageView7);
+            location = itemView.findViewById(R.id.locationimageButton);
             button = itemView.findViewById(R.id.button9);
         }
     }
@@ -392,6 +395,17 @@ class  CustomerOrderAdapter extends RecyclerView.Adapter<CustomerOrderAdapter.Cu
                 .placeholder(R.drawable.loading) // Optional: Placeholder image
                 .error(R.drawable.mark) // Optional: Error image
                 .into(holder.imageView);
+
+        CustomerOrder customerOrder2 = customerOrderArrayList.get(position);
+
+        holder.location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, LocationactivityActivity.class);
+                intent.putExtra("location",customerOrder2.getClocation());
+                context.startActivity(intent);
+            }
+        });
 
         String inputDate = customerOrderArrayList.get(position).getDate();
 

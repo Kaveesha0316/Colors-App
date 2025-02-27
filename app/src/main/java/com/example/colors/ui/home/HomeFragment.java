@@ -255,6 +255,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        TextInputEditText dd = getActivity().findViewById(R.id.SearchtextInputEditText);
+        dd.setText("");
         setupImageCarousel();
         setCategoryItem();
         if (isNetworkAvailable()) {

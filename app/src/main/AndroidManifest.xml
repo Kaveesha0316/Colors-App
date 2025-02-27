@@ -29,9 +29,11 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".WebsiteactivityActivity"
+            android:name=".LocationactivityActivity"
             android:exported="false" />
-        <!-- FileProvider for Secure File Access -->
+        <activity
+            android:name=".WebsiteactivityActivity"
+            android:exported="false" /> <!-- FileProvider for Secure File Access -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.colors.provider"

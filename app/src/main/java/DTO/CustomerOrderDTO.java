@@ -12,8 +12,16 @@ public class CustomerOrderDTO {
     private String cmobile;
     private String ccity;
     private String caddress;
-
+    private String clocation;
     public CustomerOrderDTO() {
+    }
+
+    public String getClocation() {
+        return clocation;
+    }
+
+    public void setClocation(String clocation) {
+        this.clocation = clocation;
     }
 
     public Integer getOrderId() {

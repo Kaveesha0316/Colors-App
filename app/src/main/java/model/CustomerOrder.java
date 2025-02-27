@@ -14,7 +14,9 @@ public class CustomerOrder {
     private String status;
     private String image;
 
-    public CustomerOrder(String id, String name, String qty, String price, String date, String cname, String cmobile, String ccity, String caddrss, String status, String image) {
+    private String clocation;
+
+    public CustomerOrder(String id, String name, String qty, String price, String date, String cname, String cmobile, String ccity, String caddrss, String status, String image, String clocation) {
         this.id = id;
         this.name = name;
         this.qty = qty;
@@ -26,7 +28,16 @@ public class CustomerOrder {
         this.caddrss = caddrss;
         this.status = status;
         this.image = image;
+        this.clocation = clocation;
 
+    }
+
+    public String getClocation() {
+        return clocation;
+    }
+
+    public void setClocation(String clocation) {
+        this.clocation = clocation;
     }
 
     public String getStatus() {

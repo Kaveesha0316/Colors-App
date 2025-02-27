@@ -65,6 +65,7 @@ public class profileFragment extends Fragment {
     EditText editText3;
     EditText editText4;
     EditText editText5;
+    EditText editText6;
 
       Context context;
 
@@ -82,7 +83,8 @@ public class profileFragment extends Fragment {
          editText2 = view.findViewById(R.id.edit_user_password);
          editText3 = view.findViewById(R.id.edit_user_mobile);
          editText4 = view.findViewById(R.id.edit_user_address);
-         editText5 = view.findViewById(R.id.edit_user_city);
+        editText5 = view.findViewById(R.id.edit_user_city);
+        editText6 = view.findViewById(R.id.edit_user_location);
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("com.example.colors.userprefs", Context.MODE_PRIVATE);
         String userjson = sharedPreferences.getString("userData",null);
@@ -108,6 +110,7 @@ public class profileFragment extends Fragment {
             editText3.setText(user.getMobile());
             editText4.setText(user.getAddress());
             editText5.setText(user.getCity());
+            editText6.setText(user.getLocation());
 
         }
 
@@ -177,12 +180,12 @@ public class profileFragment extends Fragment {
                     showErrorDialog(getContext(), "Please enter your address.");
                 }else if(editText5.getText().toString().isEmpty()){
                     showErrorDialog(getContext(), "Please enter your city.");
+                }else if(editText6.getText().toString().isEmpty()){
+                    showErrorDialog(getContext(), "Please enter your Location Latitude and Longitude");
                 }else if(UserImageUri == null){
                     showErrorDialog(getContext(), "Please select image.");
                 }else {
-
                     uploadImageToFirebase(UserImageUri);
-
                 }
 
 
@@ -220,6 +223,7 @@ public class profileFragment extends Fragment {
                                         user.addProperty("mobile", editText3.getText().toString());
                                         user.addProperty("address", editText4.getText().toString());
                                         user.addProperty("city", editText5.getText().toString());
+                                        user.addProperty("location", editText6.getText().toString());
                                         user.addProperty("image_path", imageUrl);
 
 

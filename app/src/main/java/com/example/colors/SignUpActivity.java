@@ -155,7 +155,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                warningmsg(findViewById(R.id.filledTextField3), findViewById(R.id.edit_text3), "Invalid password");
+                                                warningmsg(findViewById(R.id.filledTextField3), findViewById(R.id.edit_text3), "Include Min 8 chars, 1 digit, 1 lowercase, 1 uppercase, 1 special char");
                                             }
                                         });
                                     } else if ("Invalid mobile number".equals(responseDTO.getContent())) {

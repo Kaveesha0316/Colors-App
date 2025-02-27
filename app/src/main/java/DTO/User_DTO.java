@@ -25,7 +25,16 @@ public class User_DTO {
 
 
     private String image_path;
+    private String location;
     private Status_DTO status;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public int getId() {
         return id;

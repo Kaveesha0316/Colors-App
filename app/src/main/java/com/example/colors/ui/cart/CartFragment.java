@@ -380,7 +380,7 @@ SweetAlertDialog progressDialog;
 
     ;
     Random random = new Random();
-    int randomNum = 100000 + random.nextInt(900000); // Generates a 6-digit random number
+    int randomNum = 100000 + random.nextInt(900000);
     String orderId = "ORD" + randomNum;
     public void removeperchesproduct(){
         new Thread(() -> {
