@@ -1,6 +1,6 @@
 # Colors - Digital Marketplace
 
-![Marketplace Image](marketplace-image.png)
+<img src="https://github.com/Kaveesha0316/Colors-App/blob/main/app/src/main/res/drawable/Peach%20and%20Brown%20Minimalist%20Food%20Diary%20Instagram%20Post%20(1).png" alt="Marketplace Image"  />
 
 ## Overview
 
